@@ -5,7 +5,7 @@ import Icon from '../components/Icon.vue'
 const steps = [
   { title: 'El perfil', text: 'Cada procedimiento tiene su perfil: qué hace, cuánto tiempo lleva y qué aporta. «Te llevo 1 minuto. Busco a alguien que me complete».' },
   { title: 'Solo lo que usás', text: 'Cada uno vota únicamente los procedimientos en los que participa, según la matriz que mantiene el juez de paz.' },
-  { title: 'Deslizar y objetar', text: 'Derecha si te sirve. Izquierda si te sobra, con un motivo anónimo opcional: la objeción.' },
+  { title: 'Deslizar y objetar', text: 'Derecha si te sirve. Izquierda si te sobra, con un motivo anónimo obligatorio: la objeción.' },
   { title: 'El resultado', text: '70 % o más: casamiento. Entre 40 y 69 %: segunda cita. Menos de 40 %: velorio.' }
 ]
 

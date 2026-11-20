@@ -2,7 +2,10 @@
 
 Presentación web del **TP Design Thinking** (Sistemas IV · Grupo 3), construida con **Vue 3 + Vite**.
 Es la versión web de `Grupo_3_-_TP_Design_Thinking_v2.pptx`: el texto de las 19 slides y las notas del orador sale del original; el diseño y las animaciones son nuevos.
-Único cambio de texto: se quitaron los números de cláusula de ISO 9001 (9.1.3, 7.5.2, etc.); ISO 9001 queda solo como referencia general.
+Cambios de texto respecto del original:
+
+- Se quitaron los números de cláusula de ISO 9001 (9.1.3, 7.5.2, etc.); ISO 9001 queda solo como referencia general.
+- El motivo al deslizar a la izquierda (la objeción) pasa de opcional a obligatorio, en la slide 14 y en su nota.
 La slide 20 ("¡Gracias!") es una despedida agregada que no está en el .pptx.
 
 ## Cómo levantarla
