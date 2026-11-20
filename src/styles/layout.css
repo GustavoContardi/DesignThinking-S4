@@ -1,0 +1,202 @@
+/*
+ * Primitivas compartidas por todas las slides.
+ * El lienzo de escritorio mide 1600 x 900 y se escala para entrar en pantalla.
+ * En modo compacto (movil) el lienzo ocupa el viewport y cada slide scrollea.
+ */
+
+/* ---------- Slide ---------- */
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 64px 96px 92px;
+  will-change: transform, opacity;
+}
+
+.compact .slide {
+  padding: 76px 20px 104px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.slide-head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 34px;
+}
+.compact .slide-head {
+  margin-bottom: 22px;
+  gap: 10px;
+}
+
+.slide-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 22px;
+}
+.compact .slide-body {
+  flex: none;
+}
+
+/* ---------- Tipografia ---------- */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: var(--fs-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+}
+.eyebrow::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 0 18px var(--accent);
+}
+
+.title {
+  font-size: var(--fs-title);
+  max-width: 1300px;
+}
+
+.lead {
+  font-size: var(--fs-lead);
+  color: var(--muted);
+  line-height: 1.45;
+  max-width: 1150px;
+}
+
+.label {
+  font-size: var(--fs-eyebrow);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.hl {
+  background: linear-gradient(100deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Superficies ---------- */
+.card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 26px 28px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition:
+    transform 0.4s var(--ease-out),
+    border-color 0.4s var(--ease-out),
+    background 0.4s var(--ease-out);
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--line-2);
+  background: var(--surface-2);
+}
+.compact .card {
+  padding: 20px;
+}
+
+/* Tarjeta destacada: borde con degradado del acento. */
+.card-glow {
+  background:
+    linear-gradient(var(--bg-2), var(--bg-2)) padding-box,
+    linear-gradient(135deg, var(--accent), transparent 45%, var(--accent-2)) border-box;
+  border: 1.5px solid transparent;
+  box-shadow: 0 30px 80px -40px var(--accent);
+}
+.card-glow:hover {
+  background:
+    linear-gradient(var(--bg-2), var(--bg-2)) padding-box,
+    linear-gradient(135deg, var(--accent), transparent 45%, var(--accent-2)) border-box;
+}
+
+/* Tarjeta solida con el acento como fondo. */
+.card-solid {
+  background: linear-gradient(140deg, var(--accent), var(--accent-2));
+  border: 0;
+  color: #12090b;
+}
+.card-solid b,
+.card-solid strong,
+.card-solid .label {
+  color: inherit;
+}
+
+/* Pastilla numerada */
+.num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  color: #12090b;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 10px 30px -10px var(--accent);
+}
+.compact .num {
+  width: 36px;
+  height: 36px;
+  font-size: 16px;
+}
+
+/* ---------- Grillas ---------- */
+.row {
+  display: flex;
+  gap: 22px;
+}
+.cols-2,
+.cols-3,
+.cols-4,
+.cols-5 {
+  display: grid;
+  gap: 22px;
+}
+.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+.compact .row {
+  flex-direction: column;
+  gap: 14px;
+}
+.compact .cols-2,
+.compact .cols-3,
+.compact .cols-4,
+.compact .cols-5 {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+}
+
+.grow {
+  flex: 1;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,22 @@
+{
+  "name": "tinder-de-procedimientos-presentacion",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Presentacion web del TP Design Thinking (Grupo 3, Sistemas IV) construida con Vue 3 + Vite.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "lucide-vue-next": "^1.0.0",
+    "vue": "^3.5.45"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "vite": "^6.4.6"
+  }
+}

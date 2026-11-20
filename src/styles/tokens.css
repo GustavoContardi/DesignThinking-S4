@@ -1,0 +1,68 @@
+/*
+ * Tokens de diseno.
+ * Cada etapa del ciclo de vida de un procedimiento tiene su color:
+ *   flame  -> Tinder (se conocen)
+ *   gold   -> Casamiento (se casan)
+ *   violet -> Velorio (se despiden)
+ *   teal   -> Lo que funciona / juez de paz / empatia
+ */
+:root {
+  --bg: #0a0d12;
+  --bg-2: #0f141b;
+  --surface: rgba(255, 255, 255, 0.045);
+  --surface-2: rgba(255, 255, 255, 0.075);
+  --surface-3: rgba(255, 255, 255, 0.11);
+  --line: rgba(255, 255, 255, 0.09);
+  --line-2: rgba(255, 255, 255, 0.16);
+
+  --text: #f5f2ed;
+  --muted: #a3acb8;
+  --dim: #6e7784;
+
+  --flame: #ff4d6d;
+  --flame-2: #ff8a3d;
+  --gold: #ffc857;
+  --gold-2: #ff9f43;
+  --teal: #2dd4bf;
+  --teal-2: #38bdf8;
+  --violet: #a78bfa;
+  --violet-2: #6366f1;
+
+  /* Acento activo: lo redefine cada slide segun su "tono". */
+  --accent: var(--flame);
+  --accent-2: var(--flame-2);
+
+  --font-display: 'Bricolage Grotesque Variable', 'Inter Variable', system-ui, sans-serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Escala tipografica pensada para el lienzo de 1600 x 900. */
+  --fs-hero: 112px;
+  --fs-title: 54px;
+  --fs-lead: 23px;
+  --fs-h3: 25px;
+  --fs-body: 19px;
+  --fs-small: 16px;
+  --fs-eyebrow: 14px;
+
+  --radius: 22px;
+  --radius-sm: 14px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.tone-flame { --accent: var(--flame); --accent-2: var(--flame-2); }
+.tone-gold { --accent: var(--gold); --accent-2: var(--gold-2); }
+.tone-teal { --accent: var(--teal); --accent-2: var(--teal-2); }
+.tone-violet { --accent: var(--violet); --accent-2: var(--violet-2); }
+
+/* En pantallas chicas la escala baja y el layout pasa a una columna. */
+.deck.compact {
+  --fs-hero: 64px;
+  --fs-title: 30px;
+  --fs-lead: 17px;
+  --fs-h3: 19px;
+  --fs-body: 15.5px;
+  --fs-small: 14px;
+  --fs-eyebrow: 12px;
+  --radius: 18px;
+}
