@@ -15,12 +15,14 @@ defineProps({
 <template>
   <section class="slide" :class="`tone-${tone}`">
     <header v-if="eyebrow || $slots.title || $slots.head" class="slide-head">
-      <p v-if="eyebrow" class="eyebrow a-down" style="--i: 0">{{ eyebrow }}</p>
-      <h2 v-if="$slots.title" class="title a-up" style="--i: 1"><slot name="title" /></h2>
+      <p v-if="eyebrow" v-split:type="{ delay: 150, step: 20 }" class="eyebrow">{{ eyebrow }}</p>
+      <h2 v-if="$slots.title" v-split="{ delay: 260 }" class="title"><slot name="title" /></h2>
       <slot name="head" />
     </header>
     <div class="slide-body">
       <slot />
     </div>
+    <!-- Efectos que cubren toda la slide (confeti, niebla...) -->
+    <slot name="fx" />
   </section>
 </template>

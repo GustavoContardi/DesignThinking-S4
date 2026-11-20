@@ -12,6 +12,8 @@ defineProps({
   title: { type: String, required: true },
   lead: { type: String, required: true },
   tone: { type: String, default: 'flame' },
+  /* Animacion de entrada de las tarjetas de pasos. */
+  stepAnim: { type: String, default: 'a-up' },
   steps: { type: Array, required: true },
   bottom: { type: Array, required: true }
 })
@@ -21,20 +23,20 @@ defineProps({
   <SlideFrame :tone="tone" :eyebrow="eyebrow" class="idea">
     <template #head>
       <div class="idea-head">
-        <span class="idea-num a-pop" style="--i: 1">{{ num }}</span>
+        <span class="idea-num a-pop" style="--i: 1"><span class="num-ring" aria-hidden="true" />{{ num }}</span>
         <div class="idea-copy">
-          <h2 class="title a-up" style="--i: 2">{{ title }}</h2>
-          <p class="lead a-up" style="--i: 3">{{ lead }}</p>
+          <h2 v-split="{ delay: 380 }" class="title">{{ title }}</h2>
+          <p v-split="{ delay: 800, step: 22 }" class="lead">{{ lead }}</p>
         </div>
         <div class="idea-art a-fade" style="--i: 5" aria-hidden="true"><slot name="art" /></div>
       </div>
     </template>
 
-    <p class="label a-fade" style="--i: 4">CÓMO FUNCIONA</p>
-    <ol class="cols-4 idea-steps">
-      <li v-for="(s, i) in steps" :key="s.title" class="card a-up" :style="{ '--i': 5 + i }">
+    <p v-split:type="{ delay: 1200, step: 30 }" class="label">CÓMO FUNCIONA</p>
+    <ol class="cols-4 idea-steps persp">
+      <li v-for="(s, i) in steps" :key="s.title" class="card" :class="stepAnim" :style="{ '--i': 16 + i * 3 }">
         <header>
-          <span class="num">{{ i + 1 }}</span>
+          <span class="num a-pop" :style="{ '--i': 19 + i * 3 }">{{ i + 1 }}</span>
           <h3>{{ s.title }}</h3>
         </header>
         <p>{{ s.text }}</p>
@@ -47,12 +49,13 @@ defineProps({
         :key="b.label"
         class="card a-up"
         :class="{ 'card-glow': i === 1 }"
-        :style="{ '--i': 9 + i }"
+        :style="{ '--i': 30 + i * 2 }"
       >
         <p class="label">{{ b.label }}</p>
         <p class="txt">{{ b.text }}</p>
       </div>
     </div>
+    <template #fx><slot name="fx" /></template>
   </SlideFrame>
 </template>
 
@@ -67,6 +70,7 @@ defineProps({
   gap: 30px;
 }
 .idea-num {
+  position: relative;
   display: grid;
   place-items: center;
   width: 108px;
@@ -78,6 +82,13 @@ defineProps({
   color: #12090b;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   box-shadow: 0 24px 60px -20px var(--accent);
+}
+.num-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  animation: pulse-ring 2s 1.5s var(--ease-out) infinite;
 }
 .idea-copy {
   display: flex;

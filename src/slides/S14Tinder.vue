@@ -22,6 +22,7 @@ const bottom = [
     title="Tinder de procedimientos"
     lead="Cada empleado vota, de forma anónima, solo los procedimientos en los que participa: si le sirven o le sobran."
     tone="flame"
+    step-anim="a-swipe"
     :steps="steps"
     :bottom="bottom"
   >
@@ -37,6 +38,9 @@ const bottom = [
         </span>
         <span class="btn no"><Icon name="x" :size="20" :stroke="2.8" /></span>
         <span class="btn yes"><Icon name="heart" :size="20" :stroke="2.4" /></span>
+        <span v-for="n in 6" :key="n" class="float-heart" :style="{ '--n': n, '--x': (n % 3 - 1) * 26 + 'px' }">
+          <Icon name="heart" :size="10 + (n % 3) * 5" :stroke="2.2" />
+        </span>
       </div>
     </template>
   </IdeaLayout>
@@ -99,7 +103,16 @@ const bottom = [
   left: 38px;
   color: var(--muted);
 }
+.swipe-art .float-heart {
+  position: absolute;
+  right: 46px;
+  bottom: 20px;
+  color: var(--accent);
+  animation: rise-fade 3s ease-out infinite;
+  animation-delay: calc(1.6s + var(--n) * 0.5s);
+}
 .swipe-art .yes {
+  animation: heartbeat 1.6s 2s ease-in-out infinite;
   right: 38px;
   color: var(--accent);
   border-color: color-mix(in srgb, var(--accent) 50%, transparent);

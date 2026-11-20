@@ -18,17 +18,17 @@ const rules = [
 
     <div class="card card-glow question a-scale" style="--i: 2">
       <span class="q-mark" aria-hidden="true"><Icon name="help" :size="40" :stroke="1.6" /></span>
-      <p>
+      <p v-split="{ delay: 700, step: 42 }">
         ¿Cómo lograr que los empleados vean el sistema de calidad como
         <span class="hl">una herramienta propia que les ahorra trabajo</span>, y no como un control?
       </p>
     </div>
 
-    <p class="rules-title a-up" style="--i: 4">Reglas que vamos a seguir para responder esta pregunta</p>
+    <p v-split:type="{ delay: 1900, step: 18 }" class="rules-title">Reglas que vamos a seguir para responder esta pregunta</p>
 
-    <ol class="cols-5 rules">
-      <li v-for="(r, i) in rules" :key="r.b" class="card rule a-up" :style="{ '--i': 5 + i }">
-        <span class="num">{{ i + 1 }}</span>
+    <ol class="cols-5 rules persp">
+      <li v-for="(r, i) in rules" :key="r.b" class="card rule a-flip-x" :style="{ '--i': 30 + i * 2 }">
+        <span class="num a-pop" :style="{ '--i': 33 + i * 2 }">{{ i + 1 }}</span>
         <p><b>{{ r.b }}</b>{{ r.t }}</p>
       </li>
     </ol>
@@ -41,6 +41,12 @@ const rules = [
   align-items: center;
   gap: 34px;
   padding: 38px 48px;
+}
+.desafio .q-mark svg {
+  animation: wiggle 3.5s 2s ease-in-out infinite;
+}
+.desafio .rule {
+  transform-origin: 50% 0;
 }
 .desafio .q-mark {
   flex: none;

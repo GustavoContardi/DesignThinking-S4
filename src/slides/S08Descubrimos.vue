@@ -22,26 +22,26 @@ const sostienen = [
     </template>
 
     <div class="cols-2 versus">
-      <article class="card side side-ko tone-flame a-left" style="--i: 3">
+      <article class="card side side-ko tone-flame a-left" style="--i: 8">
         <header>
           <span class="mark"><Icon name="x" :size="26" :stroke="2.6" /></span>
           <h3>Lo que abandonan</h3>
         </header>
         <ul>
-          <li v-for="(t, i) in abandonan" :key="t" class="a-up" :style="{ '--i': 5 + i }">
+          <li v-for="(t, i) in abandonan" :key="t" class="a-up" :style="{ '--i': 12 + i * 3 }">
             <Icon name="x" :size="18" :stroke="2.4" />
-            <span>{{ t }}</span>
+            <span class="struck" :style="{ '--sd': 1700 + i * 240 + 'ms' }">{{ t }}</span>
           </li>
         </ul>
       </article>
 
-      <article class="card side side-ok tone-teal a-right" style="--i: 3">
+      <article class="card side side-ok tone-teal a-right" style="--i: 8">
         <header>
           <span class="mark"><Icon name="check" :size="26" :stroke="2.6" /></span>
           <h3>Lo que sostienen</h3>
         </header>
         <ul>
-          <li v-for="(t, i) in sostienen" :key="t" class="a-up" :style="{ '--i': 5 + i }">
+          <li v-for="(t, i) in sostienen" :key="t" class="a-up" :style="{ '--i': 12 + i * 3 }">
             <Icon name="check" :size="18" :stroke="2.4" />
             <span>{{ t }}</span>
           </li>
@@ -52,6 +52,24 @@ const sostienen = [
 </template>
 
 <style>
+/* Lo que abandonan se tacha solo; lo que sostienen se tilda solo. */
+.descubrimos .struck {
+  background: linear-gradient(color-mix(in srgb, var(--flame) 70%, transparent), color-mix(in srgb, var(--flame) 70%, transparent))
+    no-repeat 0 58% / 100% 2px;
+  animation: strike 0.6s var(--ease-in-out) both;
+  animation-delay: calc(var(--sd) + 600ms);
+}
+.descubrimos .side-ok li svg path {
+  stroke-dasharray: 30;
+  --len: 30;
+  animation: draw 0.6s var(--ease-out) both;
+  animation-delay: 2.2s;
+}
+.descubrimos .side-ok li:nth-child(2) svg path { animation-delay: 2.45s; }
+.descubrimos .side-ok li:nth-child(3) svg path { animation-delay: 2.7s; }
+.descubrimos .mark {
+  animation: in-pop 0.8s 1.1s var(--ease-back) both;
+}
 .descubrimos .title {
   font-size: 46px;
   line-height: 1.12;

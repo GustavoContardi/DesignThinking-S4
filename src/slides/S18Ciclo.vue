@@ -16,7 +16,7 @@ const etapas = [
     <div class="loop">
       <div class="nodes">
         <template v-for="(e, i) in etapas" :key="e.n">
-          <div class="node a-pop" :class="`tone-${e.tone}`" :style="{ '--i': 2 + i * 2 }">
+          <div class="node a-pop" :class="`tone-${e.tone}`" :style="{ '--i': 4 + i * 5, '--g': i * 1.2 + 's' }">
             <span class="orbit-ring" aria-hidden="true" />
             <span class="ico" aria-hidden="true"><Icon :name="e.icon" :size="22" :stroke="2" /></span>
             <p class="n">{{ e.n }}</p>
@@ -24,7 +24,7 @@ const etapas = [
             <p class="s">{{ e.sub }}</p>
             <p class="f">{{ e.foot }}</p>
           </div>
-          <span v-if="i < 2" class="arrow a-fade" :style="{ '--i': 3 + i * 2 }" aria-hidden="true">
+          <span v-if="i < 2" class="arrow a-left" :style="{ '--i': 7 + i * 5 }" aria-hidden="true">
             <Icon name="arrow-right" :size="30" />
           </span>
         </template>
@@ -47,16 +47,20 @@ const etapas = [
           stroke-linecap="round"
           pathLength="1"
         />
+        <!-- Particula que recorre el camino de vuelta -->
+        <circle r="6" class="traveler">
+          <animateMotion dur="3.2s" begin="3s" repeatCount="indefinite" path="M 1150 0 V 30 Q 1150 50 1130 50 H 278 Q 258 50 258 30 V 8" />
+        </circle>
         <path d="M 249 16 L 258 4 L 267 16" fill="none" style="stroke: var(--flame)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="tip" />
       </svg>
 
-      <p class="caption a-up" style="--i: 9">
+      <p class="caption a-up" style="--i: 24">
         <Icon name="repeat" :size="20" />
         <span>40–69 %: segunda cita · objeciones y actas → tablero de mejoras · lo que reencarna vuelve a Tinder</span>
       </p>
     </div>
 
-    <div class="card card-glow juez-note a-up" style="--i: 10">
+    <div class="card card-glow juez-note a-up" style="--i: 27">
       <span class="gv"><Icon name="gavel" :size="26" /></span>
       <p><b>El juez de paz coordina todo el ciclo. </b>La dirección es padrino institucional: da recursos, firma las actas y revisa resultados.</p>
     </div>
@@ -93,6 +97,28 @@ const etapas = [
     var(--bg-2);
   border: 1.5px solid color-mix(in srgb, var(--accent) 55%, transparent);
   box-shadow: 0 30px 80px -40px var(--accent);
+}
+.ciclo .node {
+  animation:
+    in-pop 0.9s var(--ease-back) both,
+    glow-cycle 3.6s ease-in-out infinite;
+  animation-delay: calc(240ms + var(--i) * 80ms), calc(3s + var(--g));
+}
+.ciclo .node:nth-child(1) .ico svg { animation: heartbeat 1.6s 2.5s ease-in-out infinite; }
+.ciclo .node:nth-child(3) .ico svg { animation: wiggle 3s 2.5s ease-in-out infinite; }
+.ciclo .node:nth-child(5) .ico svg { animation: sway 3.5s 2.5s ease-in-out infinite; }
+.ciclo .arrow svg {
+  animation: nudge 1.2s 2.4s ease-in-out infinite;
+}
+.ciclo .traveler {
+  fill: #fff;
+  filter: drop-shadow(0 0 8px var(--teal)) drop-shadow(0 0 16px var(--teal));
+  opacity: 0;
+  animation: in-fade 0.4s 3s both;
+}
+.ciclo .gv svg {
+  transform-origin: 70% 70%;
+  animation: bang 2.6s 3.4s ease-in-out infinite;
 }
 .ciclo .orbit-ring {
   position: absolute;
@@ -152,11 +178,11 @@ const etapas = [
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   --len: 1;
-  animation: draw 1.6s 1.2s var(--ease-in-out) forwards;
+  animation: draw 1.6s 1.6s var(--ease-in-out) both;
 }
 .ciclo .return .tip {
   opacity: 0;
-  animation: in-fade 0.4s 2.7s forwards;
+  animation: in-fade 0.4s 3.1s both;
 }
 .ciclo .caption {
   display: flex;

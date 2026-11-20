@@ -1,6 +1,7 @@
 <script setup>
 import IdeaLayout from '../components/IdeaLayout.vue'
 import Icon from '../components/Icon.vue'
+import Confetti from '../components/Confetti.vue'
 
 const steps = [
   { title: 'La ceremonia', text: 'Oficia el juez de paz. Se casa el equipo entero, no una persona: el compromiso es de todos.' },
@@ -22,6 +23,7 @@ const bottom = [
     title="Casamiento con el procedimiento"
     lead="Los procedimientos con 70 % o más de aprobación se aprueban formalmente y el equipo asume en público el compromiso de cumplirlos."
     tone="gold"
+    step-anim="a-drop"
     :steps="steps"
     :bottom="bottom"
   >
@@ -34,6 +36,10 @@ const bottom = [
         <span class="spark s3" />
         <Icon name="rings" :size="112" :stroke="1.3" />
       </div>
+    </template>
+    <!-- Confeti sobre toda la slide -->
+    <template #fx>
+      <Confetti :colors="['#ffc857', '#ff9f43', '#fff4d6', '#ffffff']" :delay="900" />
     </template>
   </IdeaLayout>
 </template>

@@ -1,9 +1,26 @@
 /*
- * Animaciones de entrada.
- * Cada slide se monta recien cuando se vuelve activa, asi que estas
- * animaciones corren solas al llegar. El orden se controla con --i:
- *   <div class="a-up" style="--i: 3">
+ * Sistema de animacion.
+ *
+ * 1) Entradas por clase (.a-up, .a-flip-x, .a-deal, ...). Cada slide se monta
+ *    recien al volverse activa, asi que corren solas al llegar.
+ *    El orden se controla con --i:   <div class="a-up" style="--i: 3">
+ *    Las slides que entran detras de una cortina suman --enter-delay.
+ *
+ * 2) Las entradas animan las propiedades individuales translate / scale / rotate
+ *    (no "transform"), asi se combinan con el tilt 3D de las tarjetas y con
+ *    cualquier transform estatico del elemento.
+ *
+ * 3) Regla de oro: el estado base de cada elemento es el estado FINAL.
+ *    Lo oculto vive solo en el "from" del keyframe. Asi las miniaturas de la
+ *    vista general (que desactivan animaciones) muestran todo.
  */
+
+@property --ang {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
 .a-up,
 .a-down,
 .a-left,
@@ -11,11 +28,19 @@
 .a-fade,
 .a-scale,
 .a-pop,
-.a-blur {
-  animation-duration: 0.9s;
+.a-blur,
+.a-flip-x,
+.a-flip-y,
+.a-deal,
+.a-swipe,
+.a-drop,
+.a-zoom,
+.a-stamp,
+.a-wipe {
+  animation-duration: 1s;
   animation-timing-function: var(--ease-out);
   animation-fill-mode: both;
-  animation-delay: calc(220ms + var(--i, 0) * 75ms);
+  animation-delay: calc(var(--enter-delay, 0ms) + 240ms + var(--i, 0) * 80ms);
 }
 
 .a-up { animation-name: in-up; }
@@ -24,108 +49,313 @@
 .a-right { animation-name: in-right; }
 .a-fade { animation-name: in-fade; }
 .a-scale { animation-name: in-scale; }
-.a-pop { animation-name: in-pop; animation-duration: 0.8s; animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1); }
-.a-blur { animation-name: in-blur; animation-duration: 1.1s; }
+.a-pop { animation-name: in-pop; animation-duration: 0.9s; animation-timing-function: var(--ease-back); }
+.a-blur { animation-name: in-blur; animation-duration: 1.2s; }
+.a-flip-x { animation-name: in-flip-x; animation-duration: 1.1s; }
+.a-flip-y { animation-name: in-flip-y; animation-duration: 1.1s; }
+.a-deal { animation-name: in-deal; animation-duration: 1.1s; animation-timing-function: var(--ease-back-soft); }
+.a-swipe { animation-name: in-swipe; animation-duration: 1.1s; }
+.a-drop { animation-name: in-drop; animation-duration: 1.1s; animation-timing-function: var(--ease-back-soft); }
+.a-zoom { animation-name: in-zoom; animation-duration: 1.2s; }
+.a-stamp { animation-name: in-stamp; animation-duration: 0.9s; animation-timing-function: cubic-bezier(0.5, 0, 0.75, 0); }
+.a-wipe { animation-name: in-wipe; animation-duration: 1.2s; animation-timing-function: var(--ease-in-out); }
+
+/* Contenedores que necesitan profundidad para los giros 3D. */
+.persp {
+  perspective: 1400px;
+}
 
 @keyframes in-up {
-  from { opacity: 0; transform: translateY(34px); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; translate: 0 44px; }
+  to { opacity: 1; translate: 0 0; }
 }
 @keyframes in-down {
-  from { opacity: 0; transform: translateY(-26px); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; translate: 0 -30px; }
+  to { opacity: 1; translate: 0 0; }
 }
 @keyframes in-left {
-  from { opacity: 0; transform: translateX(-46px); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; translate: -70px 0; }
+  to { opacity: 1; translate: 0 0; }
 }
 @keyframes in-right {
-  from { opacity: 0; transform: translateX(46px); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; translate: 70px 0; }
+  to { opacity: 1; translate: 0 0; }
 }
 @keyframes in-fade {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 @keyframes in-scale {
-  from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; scale: 0.88; }
+  to { opacity: 1; scale: 1; }
 }
 @keyframes in-pop {
-  from { opacity: 0; transform: scale(0.4); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; scale: 0.2; }
+  to { opacity: 1; scale: 1; }
 }
 @keyframes in-blur {
-  from { opacity: 0; filter: blur(18px); transform: scale(1.04); }
-  to { opacity: 1; filter: blur(0); transform: none; }
+  from { opacity: 0; filter: blur(22px); scale: 1.08; }
+  to { opacity: 1; filter: blur(0); scale: 1; }
+}
+@keyframes in-flip-x {
+  from { opacity: 0; rotate: x -78deg; translate: 0 40px; }
+  to { opacity: 1; rotate: x 0deg; translate: 0 0; }
+}
+@keyframes in-flip-y {
+  from { opacity: 0; rotate: y 80deg; translate: 40px 0; }
+  to { opacity: 1; rotate: y 0deg; translate: 0 0; }
+}
+@keyframes in-deal {
+  from { opacity: 0; translate: var(--dx, 0) 260px; rotate: var(--r, 12deg); scale: 0.7; }
+  to { opacity: 1; translate: 0 0; rotate: 0deg; scale: 1; }
+}
+@keyframes in-swipe {
+  from { opacity: 0; translate: 140% -40px; rotate: 22deg; }
+  to { opacity: 1; translate: 0 0; rotate: 0deg; }
+}
+@keyframes in-drop {
+  from { opacity: 0; translate: 0 -120px; scale: 0.9; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+@keyframes in-zoom {
+  from { opacity: 0; scale: 1.6; filter: blur(12px); }
+  to { opacity: 1; scale: 1; filter: blur(0); }
+}
+@keyframes in-stamp {
+  0% { opacity: 0; scale: 2.2; rotate: -14deg; }
+  100% { opacity: 1; scale: 1; rotate: 0deg; }
+}
+@keyframes in-wipe {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
 }
 
-/* Movimientos continuos (decoracion). */
+/* ---------- Texto dividido (directiva v-split) ---------- */
+.sw {
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  padding: 0.1em 0.04em 0.16em;
+  margin: -0.1em -0.04em -0.16em;
+}
+.sw-chars {
+  overflow: visible;
+}
+.swi {
+  display: inline-block;
+  animation: word-rise 1.05s var(--ease-out) both;
+  animation-delay: calc(var(--enter-delay, 0ms) + var(--d, 0ms));
+}
+.sc {
+  display: inline-block;
+  animation: char-in 0.8s var(--ease-out) both;
+  animation-delay: calc(var(--enter-delay, 0ms) + var(--d, 0ms));
+  transform-origin: 50% 80%;
+}
+.split-type .sc {
+  animation: type-in 0.04s linear both;
+  animation-delay: calc(var(--enter-delay, 0ms) + var(--d, 0ms));
+}
+/* El degradado de .hl se aplica a cada pieza para que acompane la animacion. */
+.is-split .hl {
+  background: none;
+  color: inherit;
+}
+.is-split .hl .swi,
+.is-split .hl .sc {
+  background-image: linear-gradient(100deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@keyframes word-rise {
+  from { translate: 0 110%; rotate: 7deg; opacity: 0; }
+  to { translate: 0 0; rotate: 0deg; opacity: 1; }
+}
+@keyframes char-in {
+  from { opacity: 0; translate: 0 0.5em; rotate: x -95deg; filter: blur(6px); }
+  to { opacity: 1; translate: 0 0; rotate: x 0deg; filter: blur(0); }
+}
+@keyframes type-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---------- Movimientos continuos ---------- */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-14px); }
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -14px; }
 }
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to { rotate: 360deg; }
+}
+@keyframes spin-rev {
+  to { rotate: -360deg; }
 }
 @keyframes pulse-ring {
-  0% { transform: scale(0.9); opacity: 0.55; }
-  100% { transform: scale(1.5); opacity: 0; }
+  0% { scale: 0.9; opacity: 0.6; }
+  100% { scale: 1.6; opacity: 0; }
+}
+@keyframes heartbeat {
+  0%, 40%, 100% { scale: 1; }
+  10%, 30% { scale: 1.18; }
+  20% { scale: 0.96; }
+}
+@keyframes sway {
+  0%, 100% { rotate: -6deg; }
+  50% { rotate: 6deg; }
+}
+@keyframes wiggle {
+  0%, 70%, 100% { rotate: 0deg; }
+  75% { rotate: -12deg; }
+  85% { rotate: 10deg; }
+  92% { rotate: -5deg; }
+}
+@keyframes flip-hourglass {
+  0%, 40% { rotate: 0deg; }
+  55%, 95% { rotate: 180deg; }
+  100% { rotate: 180deg; }
+}
+@keyframes spin-once-back {
+  from { rotate: 0deg; }
+  to { rotate: -360deg; }
+}
+@keyframes bang {
+  0%, 60%, 100% { rotate: 0deg; }
+  70% { rotate: -38deg; }
+  78% { rotate: 14deg; }
+  86% { rotate: 0deg; }
+}
+@keyframes shock {
+  0%, 76% { scale: 0.8; opacity: 0; }
+  78% { scale: 0.9; opacity: 0.9; }
+  100% { scale: 1.9; opacity: 0; }
 }
 @keyframes draw {
   from { stroke-dashoffset: var(--len, 1000); }
   to { stroke-dashoffset: 0; }
 }
 @keyframes swipe-card {
-  0%, 12% { transform: translateX(0) rotate(0); }
-  30%, 40% { transform: translateX(46px) rotate(10deg); }
-  58%, 68% { transform: translateX(-46px) rotate(-10deg); }
-  86%, 100% { transform: translateX(0) rotate(0); }
+  0%, 12% { translate: 0 0; rotate: 0deg; }
+  30%, 40% { translate: 54px 0; rotate: 12deg; }
+  58%, 68% { translate: -54px 0; rotate: -12deg; }
+  86%, 100% { translate: 0 0; rotate: 0deg; }
 }
 @keyframes sheen {
-  from { background-position: -200% 0; }
-  to { background-position: 200% 0; }
+  0%, 55% { translate: -120% 0; }
+  100% { translate: 220% 0; }
 }
 @keyframes drift {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(6%, -4%) scale(1.08); }
-  66% { transform: translate(-5%, 5%) scale(0.95); }
+  0%, 100% { translate: 0 0; scale: 1; }
+  33% { translate: 6% -4%; scale: 1.08; }
+  66% { translate: -5% 5%; scale: 0.95; }
+}
+@keyframes rise-fade {
+  0% { opacity: 0; translate: 0 0; scale: 0.6; }
+  20% { opacity: 1; }
+  100% { opacity: 0; translate: var(--x, 0) -150px; scale: 1.1; }
+}
+@keyframes nudge {
+  0%, 100% { translate: 0 0; opacity: 0.55; }
+  50% { translate: 8px 0; opacity: 1; }
+}
+@keyframes glow-cycle {
+  0%, 30%, 100% { box-shadow: 0 30px 80px -40px var(--accent); }
+  10% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 30%, transparent), 0 30px 100px -20px var(--accent); }
+}
+@keyframes strike {
+  from { background-size: 0% 2px; }
+  to { background-size: 100% 2px; }
+}
+@keyframes shake {
+  0%, 100% { translate: 0 0; }
+  20% { translate: -6px 3px; }
+  40% { translate: 5px -4px; }
+  60% { translate: -3px 2px; }
+  80% { translate: 2px -1px; }
+}
+@keyframes border-spin {
+  to { --ang: 360deg; }
+}
+@keyframes breathe {
+  0%, 100% { opacity: 0.5; scale: 1; }
+  50% { opacity: 0.9; scale: 1.08; }
 }
 
-/* Transiciones entre slides (direccionales). */
-.slide-next-enter-active,
-.slide-next-leave-active,
-.slide-prev-enter-active,
-.slide-prev-leave-active {
-  transition:
-    opacity 0.7s var(--ease-out),
-    transform 0.9s var(--ease-out),
-    filter 0.7s var(--ease-out);
+/* ---------- Transiciones entre slides ---------- */
+/* El tipo lo define cada slide en slides/index.js. La que entra va arriba. */
+[class*='t-'][class*='-enter-active'] {
+  z-index: 2;
 }
-.slide-next-leave-active,
-.slide-prev-leave-active {
-  transition-duration: 0.5s, 0.6s, 0.5s;
+
+/* push: empuje 3D */
+.t-push-next-enter-active,
+.t-push-prev-enter-active,
+.t-push-next-leave-active,
+.t-push-prev-leave-active {
+  transition:
+    opacity 0.8s var(--ease-out),
+    transform 1.05s var(--ease-out),
+    filter 0.8s var(--ease-out);
+}
+.t-push-next-leave-active,
+.t-push-prev-leave-active {
+  transition-duration: 0.6s, 0.75s, 0.6s;
   transition-timing-function: var(--ease-in-out);
 }
-.slide-next-enter-from {
-  opacity: 0;
-  transform: translateX(7%) scale(0.98);
-  filter: blur(8px);
+.t-push-next-enter-from { opacity: 0; transform: translateX(16%) rotateY(-24deg) scale(0.9); filter: blur(10px); }
+.t-push-next-leave-to { opacity: 0; transform: translateX(-16%) rotateY(24deg) scale(0.88); filter: blur(10px); }
+.t-push-prev-enter-from { opacity: 0; transform: translateX(-16%) rotateY(24deg) scale(0.9); filter: blur(10px); }
+.t-push-prev-leave-to { opacity: 0; transform: translateX(16%) rotateY(-24deg) scale(0.88); filter: blur(10px); }
+
+/* zoom: atravesar la slide */
+.t-zoom-next-enter-active,
+.t-zoom-prev-enter-active,
+.t-zoom-next-leave-active,
+.t-zoom-prev-leave-active {
+  transition:
+    opacity 0.8s var(--ease-out),
+    transform 1.1s var(--ease-out),
+    filter 0.8s var(--ease-out);
 }
-.slide-next-leave-to {
-  opacity: 0;
-  transform: translateX(-5%) scale(0.96);
-  filter: blur(8px);
+.t-zoom-next-leave-active,
+.t-zoom-prev-leave-active {
+  transition-duration: 0.6s, 0.8s, 0.6s;
 }
-.slide-prev-enter-from {
-  opacity: 0;
-  transform: translateX(-7%) scale(0.98);
-  filter: blur(8px);
+.t-zoom-next-enter-from { opacity: 0; transform: scale(0.7); filter: blur(16px); }
+.t-zoom-next-leave-to { opacity: 0; transform: scale(1.35); filter: blur(14px); }
+.t-zoom-prev-enter-from { opacity: 0; transform: scale(1.35); filter: blur(16px); }
+.t-zoom-prev-leave-to { opacity: 0; transform: scale(0.7); filter: blur(14px); }
+
+/* iris: la nueva slide se abre en circulo */
+.t-iris-next-enter-active,
+.t-iris-prev-enter-active {
+  transition: clip-path 1.15s var(--ease-in-out);
 }
-.slide-prev-leave-to {
+.t-iris-next-enter-from { clip-path: circle(0% at 85% 50%); }
+.t-iris-prev-enter-from { clip-path: circle(0% at 15% 50%); }
+.t-iris-next-enter-to,
+.t-iris-prev-enter-to { clip-path: circle(140% at 50% 50%); }
+.t-iris-next-leave-active,
+.t-iris-prev-leave-active {
+  transition: transform 1.15s var(--ease-in-out), opacity 1.15s, filter 1.15s;
+}
+.t-iris-next-leave-to,
+.t-iris-prev-leave-to { transform: scale(0.9); opacity: 0.15; filter: blur(6px); }
+
+/* curtain: la cortina de color tapa el cambio (ver .curtain en App.vue) */
+.t-curtain-next-enter-active,
+.t-curtain-prev-enter-active,
+.t-curtain-next-leave-active,
+.t-curtain-prev-leave-active {
+  transition: opacity 0.01s linear 0.5s;
+}
+.t-curtain-next-enter-from,
+.t-curtain-prev-enter-from,
+.t-curtain-next-leave-to,
+.t-curtain-prev-leave-to {
   opacity: 0;
-  transform: translateX(5%) scale(0.96);
-  filter: blur(8px);
 }
 
 .fade-enter-active,

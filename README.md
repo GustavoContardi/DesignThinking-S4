@@ -70,8 +70,33 @@ Cada etapa de la vida de un procedimiento tiene su color, y se repite en todo el
 - **Velorio** (se despiden): violeta
 - **Empatía, juez de paz y resultados**: verde agua
 
-Las animaciones de entrada se controlan con clases (`a-up`, `a-left`, `a-pop`, etc.) y un índice de orden `--i`.
-Si el sistema operativo pide reducir el movimiento, las animaciones se desactivan.
+### Animaciones
+
+- **Intro** al abrir: los tres íconos (corazón, anillos, lápida) y una barra de carga.
+- **Transición propia de cada slide**, definida en `src/slides/index.js`:
+  - `push`: empuje 3D
+  - `zoom`: atravesar la slide
+  - `iris`: apertura circular
+  - `curtain`: cortina de barras de color, usada en los separadores 01 / 02 / 03
+- **Texto animado** con la directiva `v-split` (`src/directives/split.js`): títulos palabra por palabra, letras en 3D (`v-split:chars`) y efecto máquina de escribir (`v-split:type`). Solo envuelve el texto, que queda idéntico al original.
+- **Entradas por clase**, con orden según `--i`:
+  - movimiento: `a-up`, `a-left`, `a-right`, `a-drop`, `a-swipe`
+  - escala: `a-pop`, `a-zoom`
+  - giro 3D: `a-flip-x`, `a-flip-y`
+  - otras: `a-deal` (carta repartida), `a-wipe` (barrido), `a-stamp` (sello)
+- **Interacción**: luz que sigue al cursor, tarjetas con inclinación 3D y reflector al pasar el mouse, y fondo con parallax e íconos flotando.
+- **Efectos por slide**:
+  - subrayado dibujado en "no alcanza"
+  - ítems que se tachan o se tildan solos
+  - cartas repartidas en las 3 ideas
+  - mazo del juez de paz que golpea
+  - tarjetas que entran deslizando como en Tinder
+  - confeti en el casamiento
+  - acta de defunción que cae, se estampa con un sello y deja niebla
+  - partícula que recorre el ciclo
+  - el antes / después que se tacha y se ilumina
+
+Si el sistema operativo pide reducir el movimiento, las animaciones y la intro se desactivan.
 
 ### Escritorio y móvil
 

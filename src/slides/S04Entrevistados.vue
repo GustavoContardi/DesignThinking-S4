@@ -25,20 +25,20 @@ const people = [
   <SlideFrame tone="teal" eyebrow="FASE 1 - EMPATIZAR" class="entrevistados">
     <template #title>Escuchamos a tres jefes del área de Sistemas.</template>
 
-    <div class="cols-3 people">
+    <div class="cols-3 people persp">
       <article
         v-for="(p, i) in people"
         :key="p.name"
-        class="card person a-up"
-        :style="{ '--i': 2 + i * 2 }"
+        class="card person a-flip-y"
+        :style="{ '--i': 4 + i * 3 }"
       >
         <div class="avatar">
           <span class="halo" />
           <IconBadge icon="user" :size="72" variant="solid" />
         </div>
-        <h3>{{ p.name }}</h3>
-        <p class="role">{{ p.role }}</p>
-        <p class="text">{{ p.text }}</p>
+        <h3 v-split:chars="{ delay: 700 + i * 240, step: 22 }">{{ p.name }}</h3>
+        <p class="role a-fade" :style="{ '--i': 9 + i * 3 }">{{ p.role }}</p>
+        <p class="text a-up" :style="{ '--i': 10 + i * 3 }">{{ p.text }}</p>
       </article>
     </div>
   </SlideFrame>
@@ -64,7 +64,14 @@ const people = [
   position: absolute;
   inset: -10px;
   border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  background: conic-gradient(from 0deg, var(--accent), transparent 30%, transparent 60%, var(--accent-2), transparent 90%);
+  mask: radial-gradient(circle, transparent 63%, #000 65%);
+  -webkit-mask: radial-gradient(circle, transparent 63%, #000 65%);
+  animation: spin 5s linear infinite;
+}
+.entrevistados .avatar .badge {
+  animation: in-pop 0.8s var(--ease-back) both;
+  animation-delay: calc(600ms + var(--i, 0) * 80ms);
 }
 .entrevistados h3 {
   font-size: 30px;

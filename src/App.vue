@@ -6,9 +6,12 @@
  *  - Navegacion: flechas, espacio, PageUp/PageDown, Home/End, swipe tactil.
  *  - Atajos: F pantalla completa, N notas del orador, O vista general.
  *  - La slide actual se refleja en la URL (#/7) para poder recargar o compartir.
+ *  - Efectos: intro, transicion propia de cada slide (push / zoom / iris /
+ *    cortina), luz que sigue al cursor, tilt 3D en tarjetas y parallax de fondo.
  */
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import Icon from './components/Icon.vue'
+import FloatingGlyphs from './components/FloatingGlyphs.vue'
 import { slides } from './slides/index.js'
 
 const W = 1600
@@ -25,6 +28,15 @@ const isFullscreen = ref(false)
 const showHint = ref(true)
 const idle = ref(false)
 const THUMB_W = 288
+
+const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+const transitionType = ref(slides[index.value].transition)
+const curtainKey = ref(0)
+const ready = ref(reducedMotion) // la slide se monta cuando termina la intro
+const showSplash = ref(!reducedMotion)
+const deckEl = ref(null)
+const cursorEl = ref(null)
+const pad = (n) => String(n).padStart(2, '0')
 
 const current = computed(() => slides[index.value])
 const progress = computed(() => ((index.value + 1) / total) * 100)
@@ -44,6 +56,8 @@ function go(i) {
   const target = clamp(i)
   if (target === index.value) return
   direction.value = target > index.value ? 'next' : 'prev'
+  transitionType.value = slides[target].transition
+  if (transitionType.value === 'curtain' && !reducedMotion) curtainKey.value++
   index.value = target
   showHint.value = false
 }
@@ -163,6 +177,50 @@ function onFullscreenChange() {
   isFullscreen.value = Boolean(document.fullscreenElement || document.webkitFullscreenElement)
 }
 
+/* ---------- Cursor, parallax y tilt de tarjetas ---------- */
+let tx = 0
+let ty = 0
+let cx = 0
+let cy = 0
+let raf = 0
+let tiltCard = null
+
+function onPointerMove(e) {
+  wake()
+  if (compact.value || e.pointerType === 'touch') return
+  tx = e.clientX
+  ty = e.clientY
+  const deck = deckEl.value
+  if (deck) {
+    deck.style.setProperty('--px', ((e.clientX / window.innerWidth) * 2 - 1).toFixed(3))
+    deck.style.setProperty('--py', ((e.clientY / window.innerHeight) * 2 - 1).toFixed(3))
+  }
+  tilt(e)
+}
+
+function tilt(e) {
+  const card = e.target.closest?.('.stage .card')
+  if (tiltCard && tiltCard !== card) {
+    tiltCard.style.transform = ''
+    tiltCard = null
+  }
+  if (!card) return
+  tiltCard = card
+  const r = card.getBoundingClientRect()
+  const x = (e.clientX - r.left) / r.width
+  const y = (e.clientY - r.top) / r.height
+  card.style.setProperty('--mx', `${(x * 100).toFixed(1)}%`)
+  card.style.setProperty('--my', `${(y * 100).toFixed(1)}%`)
+  card.style.transform = `perspective(1100px) rotateX(${((0.5 - y) * 9).toFixed(2)}deg) rotateY(${((x - 0.5) * 11).toFixed(2)}deg) translateY(-6px)`
+}
+
+function cursorLoop() {
+  cx += (tx - cx) * 0.12
+  cy += (ty - cy) * 0.12
+  if (cursorEl.value) cursorEl.value.style.transform = `translate3d(${cx}px, ${cy}px, 0)`
+  raf = requestAnimationFrame(cursorLoop)
+}
+
 /* ---------- Ocultar controles cuando el mouse no se mueve ---------- */
 let idleTimer
 function wake() {
@@ -176,18 +234,26 @@ onMounted(() => {
   window.addEventListener('resize', fit)
   window.addEventListener('keydown', onKey)
   window.addEventListener('hashchange', onHashChange)
-  window.addEventListener('mousemove', wake)
+  window.addEventListener('pointermove', onPointerMove)
   document.addEventListener('fullscreenchange', onFullscreenChange)
   document.addEventListener('webkitfullscreenchange', onFullscreenChange)
   history.replaceState(null, '', `#/${index.value + 1}`)
   wake()
-  setTimeout(() => (showHint.value = false), 6000)
+  if (!reducedMotion) {
+    cursorLoop()
+    setTimeout(() => {
+      showSplash.value = false
+      ready.value = true
+    }, 1900)
+  }
+  setTimeout(() => (showHint.value = false), 7500)
 })
 onBeforeUnmount(() => {
   window.removeEventListener('resize', fit)
   window.removeEventListener('keydown', onKey)
   window.removeEventListener('hashchange', onHashChange)
-  window.removeEventListener('mousemove', wake)
+  window.removeEventListener('pointermove', onPointerMove)
+  cancelAnimationFrame(raf)
   document.removeEventListener('fullscreenchange', onFullscreenChange)
   document.removeEventListener('webkitfullscreenchange', onFullscreenChange)
   clearTimeout(idleTimer)
@@ -201,6 +267,7 @@ function pick(i) {
 
 <template>
   <div
+    ref="deckEl"
     class="deck"
     :class="[{ compact, idle: idle && !compact }, `tone-${current.tone}`]"
     @touchstart.passive="onTouchStart"
@@ -212,13 +279,34 @@ function pick(i) {
       <span class="blob b2" />
       <span class="blob b3" />
       <span class="grain" />
+      <FloatingGlyphs />
     </div>
 
+    <!-- Luz que sigue al cursor -->
+    <div ref="cursorEl" class="cursor-glow" aria-hidden="true" />
+
     <main class="stage" :style="stageStyle" aria-live="polite">
-      <Transition :name="`slide-${direction}`">
-        <component :is="current.component" :key="index" />
+      <Transition :name="`t-${transitionType}-${direction}`">
+        <component :is="current.component" v-if="ready" :key="index" />
       </Transition>
     </main>
+
+    <!-- Cortina de color para las slides de etapa -->
+    <div v-if="curtainKey" :key="curtainKey" class="curtain" :class="direction" aria-hidden="true">
+      <span v-for="n in 5" :key="n" :style="{ '--n': n }" />
+    </div>
+
+    <!-- Intro -->
+    <Transition name="splash">
+      <div v-if="showSplash" class="splash" aria-hidden="true">
+        <div class="splash-icons">
+          <span class="sb tone-flame" style="--n: 0"><Icon name="heart" :size="44" :stroke="1.8" /></span>
+          <span class="sb tone-gold" style="--n: 1"><Icon name="rings" :size="44" :stroke="1.8" /></span>
+          <span class="sb tone-violet" style="--n: 2"><Icon name="tomb" :size="40" :stroke="1.8" /></span>
+        </div>
+        <span class="splash-bar"><span /></span>
+      </div>
+    </Transition>
 
     <!-- Barra de progreso -->
     <div class="progress" aria-hidden="true">
@@ -230,7 +318,14 @@ function pick(i) {
       <button class="ctl" :disabled="index === 0" title="Anterior (flecha izquierda)" @click="prev">
         <Icon name="chevron-left" :size="20" />
       </button>
-      <span class="counter">{{ counter }}</span>
+      <span class="counter">
+        <span class="counter-cur">
+          <Transition :name="`tick-${direction}`">
+            <span :key="index">{{ pad(index + 1) }}</span>
+          </Transition>
+        </span>
+        <span class="counter-total">/ {{ pad(total) }}</span>
+      </span>
       <button class="ctl" :disabled="index === total - 1" title="Siguiente (flecha derecha)" @click="next">
         <Icon name="chevron-right" :size="20" />
       </button>
@@ -316,6 +411,10 @@ function pick(i) {
   overflow: hidden;
   pointer-events: none;
 }
+.ambient {
+  translate: calc(var(--px, 0) * -24px) calc(var(--py, 0) * -24px);
+  transition: translate 1s var(--ease-out);
+}
 .blob {
   position: absolute;
   border-radius: 50%;
@@ -365,6 +464,121 @@ function pick(i) {
   top: 50%;
   left: 50%;
   transform-origin: center center;
+  perspective: 2400px;
+}
+
+/* ---------- Luz del cursor ---------- */
+.cursor-glow {
+  position: absolute;
+  top: -300px;
+  left: -300px;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 22%, transparent), transparent 62%);
+  mix-blend-mode: screen;
+  transition: background 1s var(--ease-out), opacity 0.6s;
+}
+.deck.idle .cursor-glow,
+.compact .cursor-glow {
+  opacity: 0;
+}
+
+/* ---------- Cortina ---------- */
+.curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  display: flex;
+  pointer-events: none;
+}
+.curtain span {
+  flex: 1;
+  height: 100%;
+  background: linear-gradient(180deg, var(--accent), var(--accent-2));
+  translate: 0 100%;
+  animation: curtain-bar 1.15s var(--ease-in-out) both;
+  animation-delay: calc(var(--n) * 55ms);
+}
+.curtain span:nth-child(even) {
+  background: linear-gradient(180deg, var(--accent-2), var(--accent));
+}
+.curtain.prev span {
+  animation-name: curtain-bar-rev;
+}
+@keyframes curtain-bar {
+  0% { translate: 0 100%; }
+  42%, 55% { translate: 0 0; }
+  100% { translate: 0 -100%; }
+}
+@keyframes curtain-bar-rev {
+  0% { translate: 0 -100%; }
+  42%, 55% { translate: 0 0; }
+  100% { translate: 0 100%; }
+}
+
+/* ---------- Intro ---------- */
+.splash {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 46px;
+  background: var(--bg);
+}
+.splash-icons {
+  display: flex;
+  gap: 26px;
+}
+.sb {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  color: #12090b;
+  background: linear-gradient(140deg, var(--accent), var(--accent-2));
+  box-shadow: 0 30px 70px -24px var(--accent);
+  animation: splash-pop 1.7s var(--ease-back) both;
+  animation-delay: calc(var(--n) * 140ms);
+}
+@keyframes splash-pop {
+  0% { scale: 0; opacity: 0; translate: 0 40px; }
+  30% { scale: 1; opacity: 1; translate: 0 0; }
+  70% { scale: 1; translate: 0 0; }
+  100% { scale: 1.08; translate: 0 -10px; }
+}
+.splash-bar {
+  width: 220px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.splash-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--flame), var(--gold), var(--violet));
+  animation: splash-load 1.5s var(--ease-in-out) both;
+}
+@keyframes splash-load {
+  from { width: 0; }
+  to { width: 100%; }
+}
+.splash-leave-active {
+  transition: clip-path 0.9s var(--ease-in-out);
+}
+.splash-leave-to {
+  clip-path: inset(0 0 100% 0);
+}
+.compact .sb {
+  width: 72px;
+  height: 72px;
 }
 .compact .stage {
   inset: 0;
@@ -389,7 +603,19 @@ function pick(i) {
   height: 100%;
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
   box-shadow: 0 0 16px var(--accent);
-  transition: width 0.8s var(--ease-out), background 1s;
+  transition: width 0.9s var(--ease-out), background 1s;
+  position: relative;
+}
+.progress span::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: -4px;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 12px 3px var(--accent);
 }
 
 /* ---------- Controles ---------- */
@@ -408,6 +634,9 @@ function pick(i) {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   transition: opacity 0.5s, transform 0.5s var(--ease-out);
+}
+.ctl:active:not(:disabled) {
+  scale: 0.88;
 }
 .deck.idle .controls {
   opacity: 0;
@@ -444,6 +673,39 @@ function pick(i) {
   min-width: 64px;
   text-align: center;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+.counter-cur {
+  position: relative;
+  display: inline-block;
+  width: 2ch;
+  height: 1.3em;
+  overflow: hidden;
+  color: var(--text);
+}
+.counter-cur > span {
+  position: absolute;
+  inset: 0;
+  line-height: 1.3em;
+}
+.tick-next-enter-active,
+.tick-next-leave-active,
+.tick-prev-enter-active,
+.tick-prev-leave-active {
+  transition: translate 0.45s var(--ease-out), opacity 0.45s;
+}
+.tick-next-enter-from,
+.tick-prev-leave-to {
+  translate: 0 100%;
+  opacity: 0;
+}
+.tick-next-leave-to,
+.tick-prev-enter-from {
+  translate: 0 -100%;
+  opacity: 0;
 }
 .sep {
   width: 1px;

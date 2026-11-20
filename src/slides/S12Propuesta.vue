@@ -46,23 +46,23 @@ const procesos = [
   <SlideFrame tone="flame" eyebrow="NUESTRA PROPUESTA" class="propuesta">
     <template #title>La vida de un procedimiento: tres procesos reales.</template>
 
-    <div class="cols-3 procesos">
+    <div class="cols-3 procesos persp">
       <article
         v-for="(p, i) in procesos"
         :key="p.name"
-        class="proc a-up"
+        class="proc a-flip-x"
         :class="`tone-${p.tone}`"
-        :style="{ '--i': 2 + i * 2 }"
+        :style="{ '--i': 4 + i * 3 }"
       >
         <header>
-          <span class="glyph"><Icon :name="p.icon" :size="30" :stroke="1.9" /></span>
+          <span class="glyph a-pop" :style="{ '--i': 6 + i * 3 }"><Icon :name="p.icon" :size="30" :stroke="1.9" /></span>
           <div>
             <p class="label">{{ p.step }}</p>
             <h3>{{ p.name }}</h3>
           </div>
         </header>
         <dl class="card">
-          <div v-for="r in p.rows" :key="r[0]" class="row-item">
+          <div v-for="(r, k) in p.rows" :key="r[0]" class="row-item a-up" :style="{ '--i': 9 + i * 2 + k * 3 }">
             <dt>{{ r[0] }}</dt>
             <dd>{{ r[1] }}</dd>
           </div>
@@ -70,7 +70,7 @@ const procesos = [
       </article>
     </div>
 
-    <p class="control a-up" style="--i: 9">
+    <p class="control a-wipe" style="--i: 24">
       <Icon name="shield-check" :size="22" />
       <span><b>Debajo del humor hay un circuito de control: </b>cada procedimiento se evalúa, se aprueba con dueño y se da de baja con registro.</span>
     </p>
@@ -104,6 +104,10 @@ const procesos = [
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   box-shadow: 0 14px 34px -14px var(--accent);
 }
+.propuesta .proc:nth-child(1) .glyph svg { animation: heartbeat 1.6s 2.4s ease-in-out infinite; }
+.propuesta .proc:nth-child(2) .glyph svg { animation: wiggle 3s 2.6s ease-in-out infinite; }
+.propuesta .proc:nth-child(3) .glyph svg { animation: sway 3.5s 2.8s ease-in-out infinite; }
+.propuesta .control svg { animation: in-pop 0.8s 2.6s var(--ease-back) both; }
 .propuesta .proc h3 {
   font-size: 34px;
   margin-top: 2px;

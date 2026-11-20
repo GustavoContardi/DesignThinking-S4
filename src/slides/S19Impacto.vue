@@ -17,19 +17,19 @@ const filas = [
 
     <div class="table">
       <div class="thead">
-        <p class="label hoy a-fade" style="--i: 2">HOY</p>
+        <p v-split:type="{ delay: 700, step: 40 }" class="label hoy">HOY</p>
         <span />
-        <p class="label con a-fade" style="--i: 2">CON NUESTRA PROPUESTA</p>
+        <p v-split:type="{ delay: 900, step: 24 }" class="label con">CON NUESTRA PROPUESTA</p>
       </div>
       <div v-for="(f, i) in filas" :key="f[0]" class="tr">
-        <p class="before a-left" :style="{ '--i': 3 + i }">
+        <p class="before a-left" :style="{ '--i': 14 + i * 5 }">
           <Icon name="x" :size="18" :stroke="2.4" />
-          <span>{{ f[0] }}</span>
+          <span :style="{ '--sd': 1700 + i * 400 + 'ms' }">{{ f[0] }}</span>
         </p>
-        <span class="to a-pop" :style="{ '--i': 4 + i }" aria-hidden="true">
+        <span class="to a-pop" :style="{ '--i': 17 + i * 5 }" aria-hidden="true">
           <Icon name="arrow-right" :size="20" :stroke="2.4" />
         </span>
-        <p class="after a-right" :style="{ '--i': 4 + i }">
+        <p class="after a-flip-x sheen" :style="{ '--i': 18 + i * 5, '--sh': 2.8 + i * 0.4 + 's' }">
           <Icon name="check" :size="18" :stroke="2.6" />
           <span>{{ f[1] }}</span>
         </p>
@@ -82,9 +82,24 @@ const filas = [
   color: var(--dim);
 }
 .impacto .before span {
-  text-decoration: line-through;
-  text-decoration-color: rgba(255, 255, 255, 0.18);
-  text-decoration-thickness: 1.5px;
+  background: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)) no-repeat 0 55% / 100% 1.5px;
+  animation: strike 0.55s var(--ease-in-out) both;
+  animation-delay: calc(var(--sd) + 450ms);
+}
+.impacto .table {
+  perspective: 1400px;
+}
+.impacto .after.sheen::after {
+  animation: sheen 1.6s var(--ease-in-out) both;
+  animation-delay: calc(var(--sh) + 600ms);
+}
+.impacto .after svg {
+  animation: in-pop 0.7s var(--ease-back) both;
+  animation-delay: calc(var(--sh) + 300ms);
+}
+.impacto .to svg {
+  animation: nudge 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--sh, 4s) + 1s);
 }
 .impacto .after {
   font-weight: 650;

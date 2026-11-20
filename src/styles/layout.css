@@ -61,6 +61,10 @@
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   box-shadow: 0 0 18px var(--accent);
+  animation:
+    in-pop 0.6s var(--ease-back) both,
+    breathe 2.4s 1.2s ease-in-out infinite;
+  animation-delay: calc(var(--enter-delay, 0ms) + 80ms), 1.2s;
 }
 
 .title {
@@ -102,32 +106,99 @@
   padding: 26px 28px;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
+  transform-style: preserve-3d;
   transition:
-    transform 0.4s var(--ease-out),
+    transform 0.5s var(--ease-out),
     border-color 0.4s var(--ease-out),
-    background 0.4s var(--ease-out);
+    background 0.4s var(--ease-out),
+    box-shadow 0.5s var(--ease-out);
 }
 .card:hover {
   transform: translateY(-4px);
   border-color: var(--line-2);
   background: var(--surface-2);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6);
+}
+/* Reflector que sigue al mouse (App.vue setea --mx / --my). */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0;
+  background: radial-gradient(
+    420px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--accent) 18%, transparent),
+    transparent 60%
+  );
+  transition: opacity 0.4s var(--ease-out);
+}
+.card:hover::before {
+  opacity: 1;
 }
 .compact .card {
   padding: 20px;
 }
 
 /* Tarjeta destacada: borde con degradado del acento. */
+/* Tarjeta destacada: borde de luz que gira alrededor. */
 .card-glow {
   background:
     linear-gradient(var(--bg-2), var(--bg-2)) padding-box,
-    linear-gradient(135deg, var(--accent), transparent 45%, var(--accent-2)) border-box;
+    conic-gradient(
+        from var(--ang),
+        var(--accent),
+        transparent 22%,
+        transparent 50%,
+        var(--accent-2) 62%,
+        transparent 80%,
+        var(--accent)
+      )
+      border-box;
   border: 1.5px solid transparent;
   box-shadow: 0 30px 80px -40px var(--accent);
+  animation: border-spin 6s linear infinite;
 }
 .card-glow:hover {
   background:
     linear-gradient(var(--bg-2), var(--bg-2)) padding-box,
-    linear-gradient(135deg, var(--accent), transparent 45%, var(--accent-2)) border-box;
+    conic-gradient(
+        from var(--ang),
+        var(--accent),
+        transparent 22%,
+        transparent 50%,
+        var(--accent-2) 62%,
+        transparent 80%,
+        var(--accent)
+      )
+      border-box;
+}
+/* Si la tarjeta ademas tiene animacion de entrada, se suman ambas. */
+.card-glow.a-up { animation: in-up 1s var(--ease-out) both, border-spin 6s linear infinite; }
+.card-glow.a-scale { animation: in-scale 1s var(--ease-out) both, border-spin 6s linear infinite; }
+.card-glow.a-left { animation: in-left 1s var(--ease-out) both, border-spin 6s linear infinite; }
+.card-glow.a-up,
+.card-glow.a-scale,
+.card-glow.a-left {
+  animation-delay: calc(var(--enter-delay, 0ms) + 240ms + var(--i, 0) * 80ms), 0s;
+}
+
+/* Brillo que cruza una superficie cada tanto. */
+.sheen {
+  position: relative;
+  overflow: hidden;
+}
+.sheen::after {
+  content: '';
+  position: absolute;
+  inset: -20% auto -20% 0;
+  width: 40%;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  translate: -120% 0;
+  animation: sheen 4.5s 1.6s var(--ease-in-out) infinite;
 }
 
 /* Tarjeta solida con el acento como fondo. */

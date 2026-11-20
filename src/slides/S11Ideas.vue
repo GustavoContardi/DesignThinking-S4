@@ -3,9 +3,9 @@ import SlideFrame from '../components/SlideFrame.vue'
 import Icon from '../components/Icon.vue'
 
 const ideas = [
-  { n: '1.', who: 'Gustavo', name: 'Tinder de procedimientos', icon: 'heart', tone: 'flame' },
-  { n: '2.', who: 'Matt', name: 'Casamiento con el procedimiento', icon: 'rings', tone: 'gold' },
-  { n: '3.', who: 'Juan Cruz', name: 'Velorio de procedimientos', icon: 'tomb', tone: 'violet' }
+  { n: '1.', who: 'Gustavo', name: 'Tinder de procedimientos', icon: 'heart', tone: 'flame', r: '-16deg', dx: '420px' },
+  { n: '2.', who: 'Matt', name: 'Casamiento con el procedimiento', icon: 'rings', tone: 'gold', r: '4deg', dx: '0px' },
+  { n: '3.', who: 'Juan Cruz', name: 'Velorio de procedimientos', icon: 'tomb', tone: 'violet', r: '16deg', dx: '-420px' }
 ]
 
 const ajustes = [
@@ -26,9 +26,9 @@ const ajustes = [
       <article
         v-for="(it, i) in ideas"
         :key="it.name"
-        class="card pick a-up"
+        class="card pick a-deal"
         :class="`tone-${it.tone}`"
-        :style="{ '--i': 2 + i * 2 }"
+        :style="{ '--i': 4 + i * 3, '--r': it.r, '--dx': it.dx }"
       >
         <span class="glyph"><Icon :name="it.icon" :size="34" :stroke="1.8" /></span>
         <p class="n">{{ it.n }}</p>
@@ -37,11 +37,11 @@ const ajustes = [
       </article>
     </div>
 
-    <div class="card ajustes a-up" style="--i: 8">
+    <div class="card ajustes a-up" style="--i: 14">
       <p class="label">AJUSTES A PARTIR DE LA DEVOLUCIÓN</p>
       <ul class="cols-2">
-        <li v-for="(a, i) in ajustes" :key="a" class="a-fade" :style="{ '--i': 9 + i }">
-          <span class="tick"><Icon name="check" :size="16" :stroke="3" /></span>
+        <li v-for="(a, i) in ajustes" :key="a" class="a-right" :style="{ '--i': 17 + i * 2 }">
+          <span class="tick a-pop" :style="{ '--i': 19 + i * 2 }"><Icon name="check" :size="16" :stroke="3" /></span>
           {{ a }}
         </li>
       </ul>
@@ -82,6 +82,9 @@ const ajustes = [
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   box-shadow: 0 16px 40px -14px var(--accent);
 }
+.ideas .pick:nth-child(1) .glyph svg { animation: heartbeat 1.6s 2s ease-in-out infinite; }
+.ideas .pick:nth-child(2) .glyph svg { animation: wiggle 3s 2.2s ease-in-out infinite; }
+.ideas .pick:nth-child(3) .glyph svg { animation: sway 3.5s 2.4s ease-in-out infinite; }
 .ideas .n {
   font-family: var(--font-display);
   font-size: 46px;

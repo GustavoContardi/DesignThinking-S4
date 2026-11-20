@@ -4,6 +4,7 @@
  *  - tone: color dominante (tambien tine el fondo ambiental)
  *  - title: nombre corto para la vista general en movil
  *  - notes: notas del orador (tecla N)
+ *  - transition: como entra la slide (push | zoom | iris | curtain)
  */
 import { markRaw } from 'vue'
 import { notes } from '../content/notes.js'
@@ -29,30 +30,31 @@ import S18Ciclo from './S18Ciclo.vue'
 import S19Impacto from './S19Impacto.vue'
 
 const list = [
-  [S01Portada, 'flame', 'TP Design Thinking'],
-  [S02Problema, 'flame', 'El problema: certificar no alcanza.'],
-  [S03Empatizar, 'teal', 'Empatizar.'],
-  [S04Entrevistados, 'teal', 'Escuchamos a tres jefes del área de Sistemas.'],
-  [S05Frases, 'teal', 'Lo que nos dijeron:'],
-  [S06Definir, 'gold', 'Definir.'],
-  [S07Comun, 'gold', 'Lo común entre los entrevistados.'],
-  [S08Descubrimos, 'gold', 'Lo que descubrimos'],
-  [S09Desafio, 'gold', 'El desafío principal:'],
-  [S10Idear, 'flame', 'Idear.'],
-  [S11Ideas, 'flame', 'Las 3 ideas seleccionadas del total:'],
-  [S12Propuesta, 'flame', 'La vida de un procedimiento: tres procesos reales.'],
-  [S13Juez, 'teal', 'El juez de paz: quien hace funcionar el sistema.'],
-  [S14Tinder, 'flame', 'Tinder de procedimientos'],
-  [S15Objeciones, 'flame', 'La minoría también tiene la palabra.'],
-  [S16Casamiento, 'gold', 'Casamiento con el procedimiento'],
-  [S17Velorio, 'violet', 'Velorio de procedimientos'],
-  [S18Ciclo, 'teal', 'Un ciclo que se repite solo.'],
-  [S19Impacto, 'teal', '¿Cómo impacta la propuesta en la Defensoría?']
+  [S01Portada, 'flame', 'zoom', 'TP Design Thinking'],
+  [S02Problema, 'flame', 'push', 'El problema: certificar no alcanza.'],
+  [S03Empatizar, 'teal', 'curtain', 'Empatizar.'],
+  [S04Entrevistados, 'teal', 'push', 'Escuchamos a tres jefes del área de Sistemas.'],
+  [S05Frases, 'teal', 'iris', 'Lo que nos dijeron:'],
+  [S06Definir, 'gold', 'curtain', 'Definir.'],
+  [S07Comun, 'gold', 'push', 'Lo común entre los entrevistados.'],
+  [S08Descubrimos, 'gold', 'zoom', 'Lo que descubrimos'],
+  [S09Desafio, 'gold', 'iris', 'El desafío principal:'],
+  [S10Idear, 'flame', 'curtain', 'Idear.'],
+  [S11Ideas, 'flame', 'push', 'Las 3 ideas seleccionadas del total:'],
+  [S12Propuesta, 'flame', 'zoom', 'La vida de un procedimiento: tres procesos reales.'],
+  [S13Juez, 'teal', 'push', 'El juez de paz: quien hace funcionar el sistema.'],
+  [S14Tinder, 'flame', 'iris', 'Tinder de procedimientos'],
+  [S15Objeciones, 'flame', 'push', 'La minoría también tiene la palabra.'],
+  [S16Casamiento, 'gold', 'iris', 'Casamiento con el procedimiento'],
+  [S17Velorio, 'violet', 'zoom', 'Velorio de procedimientos'],
+  [S18Ciclo, 'teal', 'push', 'Un ciclo que se repite solo.'],
+  [S19Impacto, 'teal', 'iris', '¿Cómo impacta la propuesta en la Defensoría?']
 ]
 
-export const slides = list.map(([component, tone, title], i) => ({
+export const slides = list.map(([component, tone, transition, title], i) => ({
   component: markRaw(component),
   tone,
+  transition,
   title,
   notes: notes[i]
 }))

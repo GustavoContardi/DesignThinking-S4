@@ -14,36 +14,36 @@ const circuito = [
   <SlideFrame tone="flame" eyebrow="IDEA 1 - GUSTAVO · OBJECIONES Y SEGUNDA CITA" class="objeciones">
     <template #title>La minoría también tiene la palabra.</template>
     <template #head>
-      <p class="lead a-up" style="--i: 2">
+      <p v-split="{ delay: 650, step: 24 }" class="lead">
         Quien vota en contra puede tener la información más valiosa. Por eso cada objeción sigue un circuito propio.
       </p>
     </template>
 
-    <p class="label a-fade" style="--i: 3">EL CIRCUITO DE UNA OBJECIÓN</p>
-    <ol class="circuito">
+    <p v-split:type="{ delay: 1300, step: 22 }" class="label">EL CIRCUITO DE UNA OBJECIÓN</p>
+    <ol class="circuito persp">
       <template v-for="(c, i) in circuito" :key="c.title">
-        <li class="card a-up" :style="{ '--i': 4 + i * 2 }">
+        <li class="card a-flip-y" :style="{ '--i': 18 + i * 4 }">
           <header>
-            <span class="num">{{ i + 1 }}</span>
+            <span class="num a-pop" :style="{ '--i': 20 + i * 4 }">{{ i + 1 }}</span>
             <h3>{{ c.title }}</h3>
           </header>
           <p>{{ c.text }}</p>
         </li>
-        <span v-if="i < 3" class="arrow a-fade" :style="{ '--i': 5 + i * 2 }" aria-hidden="true">
+        <span v-if="i < 3" class="arrow a-left" :style="{ '--i': 20 + i * 4 }" aria-hidden="true">
           <Icon name="arrow-right" :size="22" />
         </span>
       </template>
     </ol>
 
     <div class="cols-2 extra">
-      <div class="card a-up" style="--i: 12">
+      <div class="card a-up" style="--i: 36">
         <span class="ic tone-gold"><Icon name="warning" :size="22" /></span>
         <div>
           <p class="label">EN LA BODA: ¿ALGUIEN SE OPONE?</p>
           <p>Hay un momento formal de objeciones. Una objeción fundada frena el casamiento hasta revisarla.</p>
         </div>
       </div>
-      <div class="card a-up" style="--i: 13">
+      <div class="card a-up" style="--i: 38">
         <span class="ic tone-teal"><Icon name="kanban" :size="22" /></span>
         <div>
           <p class="label">TABLERO DE MEJORAS</p>
@@ -52,7 +52,7 @@ const circuito = [
       </div>
     </div>
 
-    <p class="ejemplo a-up" style="--i: 14">
+    <p class="ejemplo a-wipe" style="--i: 42">
       <Icon name="lightbulb" :size="20" />
       <span><b>Ejemplo: </b>Encuesta de mesa de ayuda, 55 % de aprobación → segunda cita. Las objeciones dicen «con una pregunta alcanza» → se reduce y se vuelve a votar.</span>
     </p>
@@ -94,6 +94,20 @@ const circuito = [
   font-size: 19px;
   line-height: 1.42;
   color: var(--muted);
+}
+.objeciones .arrow svg {
+  animation: nudge 1.2s 3.4s ease-in-out infinite;
+}
+.objeciones .circuito li:nth-of-type(4) .num {
+  box-shadow: 0 0 0 0 var(--accent);
+  animation: in-pop 0.9s var(--ease-back) both, glow-cycle 2.4s 3.6s ease-in-out infinite;
+  animation-delay: calc(240ms + var(--i) * 80ms), 3.6s;
+}
+.objeciones .ic svg {
+  animation: wiggle 3.6s 3.8s ease-in-out infinite;
+}
+.objeciones .ejemplo svg {
+  animation: breathe 2.4s 4s ease-in-out infinite;
 }
 .objeciones .arrow {
   align-self: center;

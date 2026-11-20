@@ -21,10 +21,10 @@ const pasos = [
   <SlideFrame tone="violet" eyebrow="IDEA 3 · JUAN CRUZ" class="velorio">
     <template #head>
       <div class="v-head">
-        <span class="idea-num a-pop" style="--i: 1">3</span>
+        <span class="idea-num a-pop" style="--i: 1"><span class="num-ring" aria-hidden="true" />3</span>
         <div class="v-copy">
-          <h2 class="title a-up" style="--i: 2">Velorio de procedimientos</h2>
-          <p class="lead a-up" style="--i: 3">
+          <h2 v-split="{ delay: 380 }" class="title">Velorio de procedimientos</h2>
+          <p v-split="{ delay: 800, step: 22 }" class="lead">
             Los procedimientos rechazados se dan de baja con un acta que deja trazabilidad: por qué murió, qué se rescata y quién lo reemplaza.
           </p>
         </div>
@@ -33,46 +33,95 @@ const pasos = [
 
     <div class="layout">
       <!-- Acta de defunción con estilo de documento oficial -->
-      <div class="acta-wrap a-left" style="--i: 4">
+      <div class="acta-wrap">
         <article class="acta">
           <header>
-            <p class="acta-id">ACTA DE DEFUNCIÓN N.º 004 · CICLO 2026-T4</p>
+            <p v-split:type="{ delay: 1500, step: 22 }" class="acta-id">ACTA DE DEFUNCIÓN N.º 004 · CICLO 2026-T4</p>
             <span class="tomb"><Icon name="tomb" :size="40" :stroke="1.6" /></span>
           </header>
-          <h3>Formulario F-23</h3>
-          <p class="vida">Planilla de seguimiento semanal · Alta 2019 · Baja 2026</p>
+          <h3 v-split:chars="{ delay: 1900, step: 45 }">Formulario F-23</h3>
+          <p class="vida a-fade" style="--i: 28">Planilla de seguimiento semanal · Alta 2019 · Baja 2026</p>
           <dl>
-            <div v-for="(a, i) in acta" :key="a.k" class="a-fade" :style="{ '--i': 7 + i }">
+            <div v-for="(a, i) in acta" :key="a.k" class="a-wipe" :style="{ '--i': 30 + i * 4 }">
               <dt>{{ a.k }}</dt>
               <dd>{{ a.v }}</dd>
             </div>
           </dl>
           <span class="seal" aria-hidden="true" />
         </article>
-        <p class="aclaracion">Ejemplo inventado.</p>
+        <p class="aclaracion a-fade" style="--i: 52">Ejemplo inventado.</p>
       </div>
 
       <div class="right">
-        <p class="label a-fade" style="--i: 5">CÓMO FUNCIONA</p>
+        <p v-split:type="{ delay: 1100, step: 30 }" class="label">CÓMO FUNCIONA</p>
         <ol>
-          <li v-for="(p, i) in pasos" :key="p.title" class="a-right" :style="{ '--i': 6 + i }">
-            <span class="num">{{ i + 1 }}</span>
+          <li v-for="(p, i) in pasos" :key="p.title" class="a-right" :style="{ '--i': 14 + i * 4 }">
+            <span class="num a-pop" :style="{ '--i': 16 + i * 4 }">{{ i + 1 }}</span>
             <div>
               <h4>{{ p.title }}</h4>
               <p>{{ p.text }}</p>
             </div>
           </li>
         </ol>
-        <div class="card card-glow real a-up" style="--i: 10">
+        <div class="card card-glow real a-up" style="--i: 30">
           <p class="label">PROCESO REAL</p>
           <p>Baja controlada de documentos obsoletos (ISO 9001 7.5.3). El acta va al tablero de mejoras y es el punto de partida del reemplazo (10.3).</p>
         </div>
       </div>
     </div>
+
+    <!-- Niebla baja (decorativa) -->
+    <template #fx>
+      <div class="fog" aria-hidden="true"><span /><span /><span /></div>
+    </template>
   </SlideFrame>
 </template>
 
 <style>
+/* El acta cae desde arriba, la lapida se estampa como un sello y todo tiembla. */
+.velorio .acta {
+  animation:
+    in-drop 1.1s var(--ease-back-soft) both,
+    shake 0.45s ease-in-out both;
+  animation-delay: 0.9s, 2.55s;
+}
+.velorio .tomb {
+  animation: in-stamp 0.55s cubic-bezier(0.5, 0, 0.75, 0) both;
+  animation-delay: 2.05s;
+}
+.velorio .tomb svg {
+  animation: sway 4s 3s ease-in-out infinite;
+}
+.velorio .seal {
+  animation: in-pop 0.8s 2.6s var(--ease-back) both;
+}
+.velorio .fog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 260px;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1;
+}
+.velorio .fog span {
+  position: absolute;
+  bottom: -120px;
+  width: 900px;
+  height: 260px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--violet) 22%, transparent);
+  filter: blur(60px);
+  animation: fog 18s ease-in-out infinite alternate;
+}
+.velorio .fog span:nth-child(1) { left: -200px; }
+.velorio .fog span:nth-child(2) { left: 500px; animation-duration: 24s; animation-delay: -6s; opacity: 0.7; }
+.velorio .fog span:nth-child(3) { left: 1100px; animation-duration: 21s; animation-delay: -12s; }
+@keyframes fog {
+  from { translate: -120px 0; }
+  to { translate: 160px -30px; }
+}
 .velorio .slide-head {
   margin-bottom: 26px;
 }

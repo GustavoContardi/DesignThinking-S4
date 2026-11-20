@@ -1,36 +1,55 @@
 <script setup>
 import Icon from '../components/Icon.vue'
+
+/* Particulas que orbitan alrededor de las burbujas (decorativas). */
+const sparks = [
+  { inset: -30, dur: 14, size: 8, delay: 0 },
+  { inset: 40, dur: 22, size: 6, delay: -6 },
+  { inset: 120, dur: 18, size: 5, delay: -3 },
+  { inset: -60, dur: 30, size: 4, delay: -12 },
+  { inset: 70, dur: 26, size: 7, delay: -18 }
+]
 </script>
 
 <template>
   <section class="slide tone-flame portada">
     <div class="copy">
       <h1 class="hero">
-        <span class="kicker a-down" style="--i: 0">Sistemas IV</span>
-        <span class="main a-up" style="--i: 1">TP Design <span class="hl">Thinking</span></span>
+        <span v-split:type="{ delay: 200, step: 45 }" class="kicker">Sistemas IV</span>
+        <span v-split:chars="{ delay: 520, step: 38 }" class="main">TP Design <span class="hl">Thinking</span></span>
       </h1>
-      <p class="sub a-up" style="--i: 3">
+      <p v-split="{ delay: 1250, step: 28 }" class="sub">
         Una propuesta para que el personal de la Defensoría sostenga en el tiempo los procedimientos ISO 9001.
       </p>
-      <div class="team a-up" style="--i: 5">
+      <div class="team a-up" style="--i: 22">
         <p class="group">Grupo 3</p>
         <p class="names">Zander, Matt - Contardi, Gustavo Andrés - Ranero, Juan Cruz</p>
       </div>
     </div>
 
-    <!-- Las tres etapas de la vida de un procedimiento, como burbujas orbitando -->
+    <!-- Las tres etapas de la vida de un procedimiento, orbitando -->
     <div class="orbit" aria-hidden="true">
-      <span class="ring r1" />
-      <span class="ring r2" />
-      <div class="bubble b-heart tone-flame a-pop" style="--i: 4">
-        <span class="pulse" />
-        <Icon name="heart" :size="64" :stroke="1.8" />
-      </div>
-      <div class="bubble b-rings tone-gold a-pop" style="--i: 6">
-        <Icon name="rings" :size="54" :stroke="1.8" />
-      </div>
-      <div class="bubble b-tomb tone-violet a-pop" style="--i: 8">
-        <Icon name="tomb" :size="44" :stroke="1.8" />
+      <span class="ring r1 a-fade" style="--i: 2" />
+      <span class="ring r2 a-fade" style="--i: 4" />
+      <span
+        v-for="(s, i) in sparks"
+        :key="i"
+        class="spark-orbit"
+        :style="{ inset: s.inset + 'px', animationDuration: s.dur + 's', animationDelay: s.delay + 's' }"
+      >
+        <span class="spark" :style="{ width: s.size + 'px', height: s.size + 'px' }" />
+      </span>
+      <div class="spinner">
+        <div class="bubble b-heart tone-flame a-pop" style="--i: 6">
+          <span class="pulse" />
+          <span class="upright"><Icon name="heart" :size="64" :stroke="1.8" /></span>
+        </div>
+        <div class="bubble b-rings tone-gold a-pop" style="--i: 9">
+          <span class="upright"><Icon name="rings" :size="54" :stroke="1.8" /></span>
+        </div>
+        <div class="bubble b-tomb tone-violet a-pop" style="--i: 12">
+          <span class="upright"><Icon name="tomb" :size="44" :stroke="1.8" /></span>
+        </div>
       </div>
     </div>
   </section>
@@ -48,6 +67,7 @@ import Icon from '../components/Icon.vue'
   display: flex;
   flex-direction: column;
   gap: 18px;
+  perspective: 900px;
 }
 .portada .kicker {
   font-family: var(--font-body);
@@ -74,7 +94,6 @@ import Icon from '../components/Icon.vue'
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding-left: 0;
 }
 .portada .group {
   font-family: var(--font-display);
@@ -86,26 +105,58 @@ import Icon from '../components/Icon.vue'
   color: var(--muted);
 }
 
-/* ---------- Orbita decorativa ---------- */
+/* ---------- Orbita ---------- */
 .portada .orbit {
   position: relative;
   width: 560px;
   height: 560px;
   justify-self: center;
+  translate: calc(var(--px, 0) * 26px) calc(var(--py, 0) * 26px);
+  transition: translate 1.2s var(--ease-out);
 }
 .portada .ring {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 1px dashed rgba(255, 255, 255, 0.14);
-  animation: spin 60s linear infinite;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  animation: in-fade 1s both, spin 60s linear infinite;
 }
 .portada .r2 {
   inset: 90px;
   border-style: solid;
-  border-color: rgba(255, 255, 255, 0.06);
-  animation-duration: 90s;
-  animation-direction: reverse;
+  border-color: rgba(255, 255, 255, 0.07);
+  animation: in-fade 1s both, spin-rev 90s linear infinite;
+}
+.portada .spark-orbit {
+  position: absolute;
+  border-radius: 50%;
+  animation: spin linear infinite;
+}
+.portada .spark {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 14px 2px var(--accent);
+}
+.portada .spark-orbit:nth-child(even) .spark {
+  background: var(--gold);
+  box-shadow: 0 0 14px 2px var(--gold);
+}
+/* Las burbujas giran lentamente alrededor del centro; el icono se mantiene derecho. */
+.portada .spinner {
+  position: absolute;
+  inset: 0;
+  animation: spin 70s linear infinite;
+}
+.portada .upright {
+  display: grid;
+  place-items: center;
+  animation: spin-rev 70s linear infinite;
+}
+.portada .upright svg {
+  animation: float 6s ease-in-out infinite;
 }
 .portada .bubble {
   position: absolute;
@@ -116,14 +167,14 @@ import Icon from '../components/Icon.vue'
   background: linear-gradient(140deg, var(--accent), var(--accent-2));
   box-shadow: 0 40px 90px -30px var(--accent);
 }
-.portada .bubble > svg {
-  animation: float 6s ease-in-out infinite;
-}
 .portada .b-heart {
   width: 220px;
   height: 220px;
   top: 30px;
   left: 70px;
+}
+.portada .b-heart svg {
+  animation: heartbeat 1.6s 2s ease-in-out infinite;
 }
 .portada .b-rings {
   width: 170px;
@@ -131,7 +182,7 @@ import Icon from '../components/Icon.vue'
   top: 210px;
   right: 10px;
 }
-.portada .b-rings > svg {
+.portada .b-rings svg {
   animation-delay: -2s;
 }
 .portada .b-tomb {
@@ -140,15 +191,15 @@ import Icon from '../components/Icon.vue'
   bottom: 30px;
   left: 60px;
 }
-.portada .b-tomb > svg {
-  animation-delay: -4s;
+.portada .b-tomb svg {
+  animation: sway 4s ease-in-out infinite;
 }
 .portada .pulse {
   position: absolute;
   inset: 0;
   border-radius: 50%;
   border: 2px solid var(--accent);
-  animation: pulse-ring 2.4s var(--ease-out) infinite;
+  animation: pulse-ring 1.6s 2s var(--ease-out) infinite;
 }
 
 .compact .portada {
@@ -165,8 +216,9 @@ import Icon from '../components/Icon.vue'
 .compact .portada .b-heart { width: 100px; height: 100px; top: 10px; left: 30px; }
 .compact .portada .b-rings { width: 80px; height: 80px; top: 90px; right: 4px; }
 .compact .portada .b-tomb { width: 64px; height: 64px; bottom: 14px; left: 34px; }
-.compact .portada .bubble svg { width: 40%; height: 40%; }
+.compact .portada .bubble svg { width: 40px; height: 40px; }
 .compact .portada .r2 { inset: 40px; }
+.compact .portada .spark-orbit { display: none; }
 .compact .portada .kicker { font-size: 14px; }
 .compact .portada .sub { margin-top: 18px; font-size: 18px; }
 .compact .portada .team { margin-top: 26px; }

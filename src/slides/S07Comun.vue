@@ -15,12 +15,12 @@ const items = [
     <template #title>Lo común entre los entrevistados.</template>
 
     <div class="layout">
-      <div class="cols-2 grid">
+      <div class="cols-2 grid persp">
         <article
           v-for="(it, i) in items"
           :key="it.title"
-          class="card item a-up"
-          :style="{ '--i': 2 + i }"
+          class="card item a-flip-x"
+          :style="{ '--i': 4 + i * 2 }"
         >
           <IconBadge :icon="it.icon" :size="54" />
           <div>
@@ -30,10 +30,10 @@ const items = [
         </article>
       </div>
 
-      <aside class="card card-solid valoran a-right" style="--i: 7">
+      <aside class="card card-solid valoran sheen a-zoom" style="--i: 13">
         <IconBadge icon="anchor" :size="64" class="anchor-badge" />
         <p class="label">LO QUE SÍ VALORAN</p>
-        <p class="big">Tener orden y que no haya trabajo que dependa de una sola persona.</p>
+        <p v-split="{ delay: 1700, step: 45 }" class="big">Tener orden y que no haya trabajo que dependa de una sola persona.</p>
         <p class="foot">Este es el punto de apoyo de nuestra propuesta.</p>
       </aside>
     </div>
@@ -71,6 +71,14 @@ const items = [
 }
 .comun .valoran:hover {
   transform: translateY(-4px) rotate(-0.4deg);
+}
+.comun .anchor-badge svg {
+  transform-origin: 50% 10%;
+  animation: sway 3s 2s ease-in-out infinite;
+}
+.comun .item .badge svg {
+  animation: in-pop 0.7s var(--ease-back) both;
+  animation-delay: calc(700ms + var(--i, 0) * 80ms);
 }
 .comun .anchor-badge {
   background: rgba(0, 0, 0, 0.14) !important;

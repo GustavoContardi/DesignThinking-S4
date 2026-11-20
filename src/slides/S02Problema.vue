@@ -12,26 +12,32 @@ const steps = [
 
 <template>
   <SlideFrame tone="flame" class="problema">
-    <template #title>El problema: certificar <span class="hl">no alcanza</span>.</template>
+    <template #title>
+      El problema: certificar
+      <span class="hl scribble">no alcanza<svg class="scrib" viewBox="0 0 300 24" preserveAspectRatio="none" aria-hidden="true"><path d="M3 15 C 50 5, 95 21, 150 12 S 250 4, 297 14" pathLength="1" /></svg></span>.
+    </template>
 
-    <div class="flow">
+    <div class="flow persp">
       <template v-for="(s, i) in steps" :key="s.title">
-        <article class="card step a-up" :class="{ last: i === 2 }" :style="{ '--i': 2 + i * 2 }">
+        <article class="card step a-flip-x" :class="[`s${i + 1}`, { last: i === 2 }]" :style="{ '--i': 4 + i * 3 }">
           <IconBadge :icon="s.icon" :size="62" :variant="i === 2 ? 'solid' : 'soft'" />
           <h3>{{ s.title }}</h3>
           <p class="muted">{{ s.text }}</p>
         </article>
-        <span v-if="i < 2" class="arrow a-fade" :style="{ '--i': 3 + i * 2 }" aria-hidden="true">
+        <span v-if="i < 2" class="arrow a-fade" :style="{ '--i': 6 + i * 3 }" aria-hidden="true">
           <Icon name="chevron-right" :size="26" />
         </span>
       </template>
     </div>
 
-    <div class="card card-glow objetivo a-scale" style="--i: 8">
-      <IconBadge icon="target" :size="72" variant="solid" />
+    <div class="card card-glow objetivo a-scale" style="--i: 13">
+      <span class="target-wrap">
+        <span class="ping" aria-hidden="true" />
+        <IconBadge icon="target" :size="72" variant="solid" />
+      </span>
       <div>
         <p class="label">NUESTRO OBJETIVO</p>
-        <p class="statement">
+        <p v-split="{ delay: 1700, step: 32 }" class="statement">
           Que los empleados adopten los procedimientos como algo propio y los sostengan en el tiempo, sin necesidad de que nadie los controle.
         </p>
       </div>
@@ -40,6 +46,56 @@ const steps = [
 </template>
 
 <style>
+.problema .scribble {
+  position: relative;
+  display: inline-block;
+}
+.problema .scrib {
+  position: absolute;
+  left: -2%;
+  bottom: -0.16em;
+  width: 104%;
+  height: 0.32em;
+  overflow: visible;
+}
+.problema .scrib path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: draw 0.9s 1.2s var(--ease-in-out) both;
+  --len: 1;
+}
+/* Iconos con vida propia */
+.problema .s1 .badge svg {
+  animation: in-pop 0.7s 1.2s var(--ease-back) both;
+}
+.problema .s2 .badge svg {
+  animation: flip-hourglass 3.2s 1.6s var(--ease-in-out) infinite;
+}
+.problema .s3 .badge svg {
+  animation: spin-once-back 1.2s 1.9s var(--ease-in-out) both;
+}
+.problema .s3 {
+  animation: in-flip-x 1.1s var(--ease-out) both, shake 0.5s 2.6s ease-in-out;
+  animation-delay: calc(240ms + var(--i) * 80ms), 2.6s;
+}
+.problema .arrow svg {
+  animation: nudge 1.4s 1.8s ease-in-out infinite;
+}
+.problema .target-wrap {
+  position: relative;
+  display: grid;
+}
+.problema .ping {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  animation: pulse-ring 1.8s 2.2s var(--ease-out) infinite;
+}
 .problema .flow {
   display: grid;
   grid-template-columns: 1fr auto 1fr auto 1fr;

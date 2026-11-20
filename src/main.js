@@ -10,5 +10,6 @@ import './styles/animations.css'
 import './styles/layout.css'
 
 import App from './App.vue'
+import { vSplit } from './directives/split.js'
 
-createApp(App).mount('#app')
+createApp(App).directive('split', vSplit).mount('#app')

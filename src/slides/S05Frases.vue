@@ -25,14 +25,14 @@ const quotes = [
   <SlideFrame tone="teal" eyebrow="FASE 1 - EMPATIZAR" class="frases">
     <template #title>Lo que nos dijeron:</template>
 
-    <div class="cols-3 quotes">
+    <div class="cols-3 quotes persp">
       <figure v-for="(q, i) in quotes" :key="q.who" class="quote">
-        <span class="q-icon a-pop" :style="{ '--i': 2 + i * 2 }"><Icon name="quote" :size="30" /></span>
-        <blockquote class="a-up" :style="{ '--i': 2 + i * 2 }">
-          <p v-for="l in q.lines" :key="l">{{ l }}</p>
+        <span class="q-icon a-pop" :style="{ '--i': 3 + i * 3 }"><Icon name="quote" :size="30" /></span>
+        <blockquote>
+          <p v-for="(l, k) in q.lines" :key="l" v-split:type="{ delay: 700 + i * 350 + k * 900, step: 15 }">{{ l }}</p>
         </blockquote>
-        <figcaption class="a-up" :style="{ '--i': 3 + i * 2 }">{{ q.who }}</figcaption>
-        <p class="insight a-up" :style="{ '--i': 4 + i * 2 }">{{ q.insight }}</p>
+        <figcaption class="a-left" :style="{ '--i': 28 + i * 2 }">{{ q.who }}</figcaption>
+        <p class="insight a-flip-x" :style="{ '--i': 30 + i * 2 }">{{ q.insight }}</p>
       </figure>
     </div>
   </SlideFrame>
@@ -49,6 +49,8 @@ const quotes = [
   gap: 18px;
 }
 .frases .q-icon {
+  animation: in-pop 0.9s var(--ease-back) both, wiggle 4s 3s ease-in-out infinite;
+  animation-delay: calc(240ms + var(--i) * 80ms), 3s;
   display: grid;
   place-items: center;
   width: 58px;

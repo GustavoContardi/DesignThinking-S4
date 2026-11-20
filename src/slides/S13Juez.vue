@@ -24,11 +24,14 @@ const trimestre = [
     <div class="layout">
       <aside class="card card-glow perfil a-left" style="--i: 2">
         <header>
-          <IconBadge icon="gavel" :size="64" variant="solid" />
-          <h3>Juez de paz</h3>
+          <span class="gavel-wrap">
+            <span class="shock" aria-hidden="true" />
+            <IconBadge icon="gavel" :size="64" variant="solid" />
+          </span>
+          <h3 v-split:chars="{ delay: 700, step: 40 }">Juez de paz</h3>
         </header>
         <dl>
-          <div v-for="q in quien" :key="q[0]">
+          <div v-for="(q, k) in quien" :key="q[0]" class="a-up" :style="{ '--i': 6 + k * 2 }">
             <dt class="label">{{ q[0] }}</dt>
             <dd>{{ q[1] }}</dd>
           </div>
@@ -36,11 +39,11 @@ const trimestre = [
       </aside>
 
       <section class="timeline">
-        <p class="label a-fade" style="--i: 3">QUÉ HACE EN CADA TRIMESTRE</p>
+        <p v-split:type="{ delay: 900, step: 22 }" class="label">QUÉ HACE EN CADA TRIMESTRE</p>
         <ol>
-          <li v-for="(s, i) in trimestre" :key="s.when" class="a-right" :style="{ '--i': 4 + i }">
+          <li v-for="(s, i) in trimestre" :key="s.when" class="a-right" :style="{ '--i': 12 + i * 3 }">
             <span class="when">{{ s.when }}</span>
-            <span class="dot" aria-hidden="true" />
+            <span class="dot a-pop" :style="{ '--i': 13 + i * 3 }" aria-hidden="true" />
             <p class="what"><b>{{ s.b }}</b>{{ s.t }}</p>
           </li>
         </ol>
@@ -61,6 +64,29 @@ const trimestre = [
   flex-direction: column;
   gap: 24px;
   padding: 32px;
+}
+.juez .gavel-wrap {
+  position: relative;
+  display: grid;
+}
+.juez .gavel-wrap .badge svg {
+  transform-origin: 70% 70%;
+  animation: bang 2.6s 1.6s ease-in-out infinite;
+}
+.juez .shock {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  animation: shock 2.6s 1.6s ease-out infinite;
+}
+.juez .timeline ol::before {
+  transform-origin: top;
+  animation: grow-y 2s 1.1s var(--ease-in-out) both;
+}
+@keyframes grow-y {
+  from { scale: 1 0; }
+  to { scale: 1 1; }
 }
 .juez .perfil header {
   display: flex;
