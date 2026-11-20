@@ -65,7 +65,7 @@ const pasos = [
         </ol>
         <div class="card card-glow real a-up" style="--i: 30">
           <p class="label">PROCESO REAL</p>
-          <p>Baja controlada de documentos obsoletos (ISO 9001 7.5.3). El acta va al tablero de mejoras y es el punto de partida del reemplazo (10.3).</p>
+          <p>Baja controlada de documentos obsoletos. El acta va al tablero de mejoras y es el punto de partida del reemplazo.</p>
         </div>
       </div>
     </div>

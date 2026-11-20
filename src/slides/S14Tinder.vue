@@ -10,7 +10,7 @@ const steps = [
 ]
 
 const bottom = [
-  { label: 'PROCESO REAL', text: 'Evaluación periódica de procedimientos por sus usuarios. Objetivo: saber cuáles aportan valor. Registro: resultados por área y objeciones (ISO 9001 9.1.3).' },
+  { label: 'PROCESO REAL', text: 'Evaluación periódica de procedimientos por sus usuarios. Objetivo: saber cuáles aportan valor. Registro: resultados por área y objeciones.' },
   { label: 'CÓMO SE SOSTIENE EN EL TIEMPO', text: 'Cada 3 meses, desde la app, en 5 minutos. Anónimo y por área: se evalúa el procedimiento, nunca a la persona.' }
 ]
 </script>

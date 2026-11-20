@@ -4,7 +4,9 @@
  *  - tone: color dominante (tambien tine el fondo ambiental)
  *  - title: nombre corto para la vista general en movil
  *  - notes: notas del orador (tecla N)
- *  - transition: como entra la slide (push | zoom | iris | curtain)
+ *  - transition: como entra la slide (push | zoom | iris | curtain | finale)
+ *
+ * La slide 20 (despedida) no existe en el .pptx: es el cierre agregado.
  */
 import { markRaw } from 'vue'
 import { notes } from '../content/notes.js'
@@ -28,6 +30,7 @@ import S16Casamiento from './S16Casamiento.vue'
 import S17Velorio from './S17Velorio.vue'
 import S18Ciclo from './S18Ciclo.vue'
 import S19Impacto from './S19Impacto.vue'
+import S20Gracias from './S20Gracias.vue'
 
 const list = [
   [S01Portada, 'flame', 'zoom', 'TP Design Thinking'],
@@ -48,7 +51,8 @@ const list = [
   [S16Casamiento, 'gold', 'iris', 'Casamiento con el procedimiento'],
   [S17Velorio, 'violet', 'zoom', 'Velorio de procedimientos'],
   [S18Ciclo, 'teal', 'push', 'Un ciclo que se repite solo.'],
-  [S19Impacto, 'teal', 'iris', '¿Cómo impacta la propuesta en la Defensoría?']
+  [S19Impacto, 'teal', 'iris', '¿Cómo impacta la propuesta en la Defensoría?'],
+  [S20Gracias, 'flame', 'finale', '¡Gracias!']
 ]
 
 export const slides = list.map(([component, tone, transition, title], i) => ({

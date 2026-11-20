@@ -5,7 +5,7 @@ import IconBadge from '../components/IconBadge.vue'
 const quien = [
   ['QUIÉN ES', 'Un miembro del equipo, no un directivo. Lo elige el equipo, rota cada año y tiene horas asignadas para la tarea.'],
   ['QUÉ NO HACE', 'No evalúa personas ni decide solo: coordina, registra y hace seguimiento.'],
-  ['Y LA DIRECCIÓN', 'Es padrino institucional: da recursos, firma las actas y revisa los resultados (ISO 9001 9.3).']
+  ['Y LA DIRECCIÓN', 'Es padrino institucional: da recursos, firma las actas y revisa los resultados.']
 ]
 
 const trimestre = [

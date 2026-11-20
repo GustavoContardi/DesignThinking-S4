@@ -40,5 +40,7 @@ export const notes = [
   // 18
   'PUCHI: Todo junto forma un ciclo que se repite solo. Cada 3 meses hay Tinder. Con 70 % o más, casamiento, con aniversario a los 6 meses. Con menos de 40 %, velorio con acta de defunción. Entre 40 y 69 %, segunda cita. Las objeciones y las actas van al tablero de mejoras, y lo que reencarna vuelve a Tinder en el ciclo siguiente. El juez de paz coordina todo, y la dirección es padrino institucional: da recursos, firma las actas y revisa resultados.',
   // 19
-  'MATT: Si la propuesta funciona, esto es lo que cambia. Hoy la calidad es para el auditor; con la propuesta, cada procedimiento tiene objetivo y dueño. Hoy medir es que me controlen; mañana votamos solo lo que usamos, sin nombres. Hoy el que no está de acuerdo no tiene voz; mañana las objeciones se escuchan y se resuelven. Hoy en una urgencia se saltea; mañana el camino rápido también está escrito. Y los papeles inútiles ya no se acumulan: se dan de baja con acta y con su reemplazo. Muchas gracias.'
+  'MATT: Si la propuesta funciona, esto es lo que cambia. Hoy la calidad es para el auditor; con la propuesta, cada procedimiento tiene objetivo y dueño. Hoy medir es que me controlen; mañana votamos solo lo que usamos, sin nombres. Hoy el que no está de acuerdo no tiene voz; mañana las objeciones se escuchan y se resuelven. Hoy en una urgencia se saltea; mañana el camino rápido también está escrito. Y los papeles inútiles ya no se acumulan: se dan de baja con acta y con su reemplazo. Muchas gracias.',
+  // 20 (despedida, no esta en el .pptx)
+  'TODOS: Cierre. Agradecer y abrir a preguntas. Tip: un click en cualquier parte de la slide lanza fuegos artificiales en ese punto.'
 ]

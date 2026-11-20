@@ -11,7 +11,7 @@ const steps = [
 ]
 
 const bottom = [
-  { label: 'PROCESO REAL', text: 'Aprobación formal y compromiso de cumplimiento. Objetivo: que cada procedimiento vigente tenga dueño, versión para urgencias y revisión programada (ISO 9001 5.1 y 7.5.2).' },
+  { label: 'PROCESO REAL', text: 'Aprobación formal y compromiso de cumplimiento. Objetivo: que cada procedimiento vigente tenga dueño, versión para urgencias y revisión programada.' },
   { label: 'CÓMO SE SOSTIENE EN EL TIEMPO', text: 'Aniversario a los 6 meses: el juez de paz revisa con datos si se cumplió. Si cumplió, se renuevan los votos. Si no, segunda cita o divorcio.' }
 ]
 </script>

@@ -1,7 +1,9 @@
 # DesignThinking-S4
 
 Presentación web del **TP Design Thinking** (Sistemas IV · Grupo 3), construida con **Vue 3 + Vite**.
-Es la versión web de `Grupo_3_-_TP_Design_Thinking_v2.pptx`: el texto de las 19 slides y las notas del orador son idénticos al original; el diseño y las animaciones son nuevos.
+Es la versión web de `Grupo_3_-_TP_Design_Thinking_v2.pptx`: el texto de las 19 slides y las notas del orador sale del original; el diseño y las animaciones son nuevos.
+Único cambio de texto: se quitaron los números de cláusula de ISO 9001 (9.1.3, 7.5.2, etc.); ISO 9001 queda solo como referencia general.
+La slide 20 ("¡Gracias!") es una despedida agregada que no está en el .pptx.
 
 ## Cómo levantarla
 
@@ -49,6 +51,7 @@ src/
     index.js              Orden de las slides, color de cada una y notas
     S01Portada.vue ...    Una slide por archivo, en el mismo orden que el .pptx
     S19Impacto.vue
+    S20Gracias.vue        Despedida (agregada, no está en el .pptx)
   components/
     SlideFrame.vue        Marco común (etiqueta de sección + título + cuerpo)
     SectionDivider.vue    Separadores 01 Empatizar / 02 Definir / 03 Idear
@@ -78,6 +81,7 @@ Cada etapa de la vida de un procedimiento tiene su color, y se repite en todo el
   - `zoom`: atravesar la slide
   - `iris`: apertura circular
   - `curtain`: cortina de barras de color, usada en los separadores 01 / 02 / 03
+  - `finale`: cortina con los cuatro colores del deck, usada en la despedida
 - **Texto animado** con la directiva `v-split` (`src/directives/split.js`): títulos palabra por palabra, letras en 3D (`v-split:chars`) y efecto máquina de escribir (`v-split:type`). Solo envuelve el texto, que queda idéntico al original.
 - **Entradas por clase**, con orden según `--i`:
   - movimiento: `a-up`, `a-left`, `a-right`, `a-drop`, `a-swipe`
@@ -95,6 +99,7 @@ Cada etapa de la vida de un procedimiento tiene su color, y se repite en todo el
   - acta de defunción que cae, se estampa con un sello y deja niebla
   - partícula que recorre el ciclo
   - el antes / después que se tacha y se ilumina
+  - despedida: letras de "¡Gracias!" que caen en 3D, destello con ondas, explosión de íconos, fuegos artificiales en loop (click en cualquier parte para lanzar uno), confeti y cintas cruzadas con los conceptos del deck
 
 Si el sistema operativo pide reducir el movimiento, las animaciones y la intro se desactivan.
 

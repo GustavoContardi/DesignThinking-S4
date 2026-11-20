@@ -11,8 +11,7 @@ const procesos = [
     rows: [
       ['PROCESO REAL', 'Evaluación periódica de los procedimientos por quienes los usan.'],
       ['OBJETIVO', 'Detectar cuáles aportan valor y cuáles solo suman trabajo.'],
-      ['REGISTRO DE CONTROL', 'Resultado por procedimiento y por área, más las objeciones.'],
-      ['ISO 9001', '9.1.3 Análisis y evaluación.']
+      ['REGISTRO DE CONTROL', 'Resultado por procedimiento y por área, más las objeciones.']
     ]
   },
   {
@@ -23,8 +22,7 @@ const procesos = [
     rows: [
       ['PROCESO REAL', 'Aprobación formal del procedimiento y compromiso de cumplirlo.'],
       ['OBJETIVO', 'Que cada procedimiento vigente tenga dueño, versión para urgencias y fecha de revisión.'],
-      ['REGISTRO DE CONTROL', 'Acta de aprobación: la libreta.'],
-      ['ISO 9001', '5.1 Liderazgo · 7.5.2 Creación y actualización.']
+      ['REGISTRO DE CONTROL', 'Acta de aprobación: la libreta.']
     ]
   },
   {
@@ -35,8 +33,7 @@ const procesos = [
     rows: [
       ['PROCESO REAL', 'Baja controlada de un procedimiento obsoleto.'],
       ['OBJETIVO', 'Eliminar lo que sobra sin perder lo útil y dejando la causa por escrito.'],
-      ['REGISTRO DE CONTROL', 'Acta de defunción, que alimenta el tablero de mejoras.'],
-      ['ISO 9001', '7.5.3 Control · 10.3 Mejora continua.']
+      ['REGISTRO DE CONTROL', 'Acta de defunción, que alimenta el tablero de mejoras.']
     ]
   }
 ]

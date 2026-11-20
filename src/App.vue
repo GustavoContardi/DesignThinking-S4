@@ -57,7 +57,8 @@ function go(i) {
   if (target === index.value) return
   direction.value = target > index.value ? 'next' : 'prev'
   transitionType.value = slides[target].transition
-  if (transitionType.value === 'curtain' && !reducedMotion) curtainKey.value++
+  const t = transitionType.value
+  if ((t === 'curtain' || t === 'finale') && !reducedMotion) curtainKey.value++
   index.value = target
   showHint.value = false
 }
@@ -286,14 +287,20 @@ function pick(i) {
     <div ref="cursorEl" class="cursor-glow" aria-hidden="true" />
 
     <main class="stage" :style="stageStyle" aria-live="polite">
-      <Transition :name="`t-${transitionType}-${direction}`">
+      <Transition :name="`t-${transitionType === 'finale' ? 'curtain' : transitionType}-${direction}`">
         <component :is="current.component" v-if="ready" :key="index" />
       </Transition>
     </main>
 
     <!-- Cortina de color para las slides de etapa -->
-    <div v-if="curtainKey" :key="curtainKey" class="curtain" :class="direction" aria-hidden="true">
-      <span v-for="n in 5" :key="n" :style="{ '--n': n }" />
+    <div
+      v-if="curtainKey"
+      :key="curtainKey"
+      class="curtain"
+      :class="[direction, { finale: transitionType === 'finale' }]"
+      aria-hidden="true"
+    >
+      <span v-for="n in transitionType === 'finale' ? 8 : 5" :key="n" :style="{ '--n': n }" />
     </div>
 
     <!-- Intro -->
@@ -508,6 +515,11 @@ function pick(i) {
 .curtain.prev span {
   animation-name: curtain-bar-rev;
 }
+/* Cortina del cierre: los cuatro colores del deck. */
+.curtain.finale span:nth-child(4n + 1) { background: linear-gradient(180deg, var(--flame), var(--flame-2)); }
+.curtain.finale span:nth-child(4n + 2) { background: linear-gradient(180deg, var(--gold), var(--gold-2)); }
+.curtain.finale span:nth-child(4n + 3) { background: linear-gradient(180deg, var(--violet), var(--violet-2)); }
+.curtain.finale span:nth-child(4n + 4) { background: linear-gradient(180deg, var(--teal), var(--teal-2)); }
 @keyframes curtain-bar {
   0% { translate: 0 100%; }
   42%, 55% { translate: 0 0; }
